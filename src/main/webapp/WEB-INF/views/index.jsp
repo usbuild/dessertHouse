@@ -11,6 +11,6 @@
     <title></title>
 </head>
 <body>
-Hello!
+StoredData:${data}
 </body>
 </html>
