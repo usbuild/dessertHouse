@@ -11,7 +11,15 @@
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <mvc:annotation-driven/>
-    <context:component-scan base-package="com.lecoding"/>
+    <context:component-scan base-package="com.lecoding.controllers">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <mvc:view-controller path="/" view-name="forward:/index" />
+    <mvc:default-servlet-handler/>
+    <mvc:resources mapping="/images/**" location="/WEB-INF/images/" />
+    <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
+
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>

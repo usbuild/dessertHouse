@@ -5,9 +5,9 @@
     <groupId>com.lecoding</groupId>
     <artifactId>dessertHouse</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
-    <name>dessertHouse</name>
+    <name>DessertHouse</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -24,6 +24,12 @@
             <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${org.springframework.version}</version>
@@ -39,6 +45,7 @@
             <artifactId>spring-expression</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
+
         <!--Hibernate-->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -73,6 +80,12 @@
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
 
 

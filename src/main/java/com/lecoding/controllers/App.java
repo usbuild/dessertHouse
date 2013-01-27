@@ -1,9 +1,9 @@
 package com.lecoding.controllers;
 
-import com.lecoding.models.BankCustomer;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.lecoding.models.dao.UserDAO;
+import com.lecoding.models.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,14 +12,19 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/app")
 public class App {
     @Autowired
-    private SessionFactory sessionFactory;
+    @Qualifier("userDAO")
+    UserDAO userDAO;
 
-    @RequestMapping("/index")
-    public ModelAndView index() {
-        Session session = sessionFactory.openSession();
-        BankCustomer bankCustomer = (BankCustomer)session.get(BankCustomer.class, 1);
+    @RequestMapping("/")
+    public ModelAndView hello() throws Exception {
         ModelAndView mv = new ModelAndView("index");
-        mv.addObject("data", bankCustomer.getName());
+        User user = new User();
+        user.setName("hello");
+        user.setPassword("123");
+        user.setSalt("123");
+        user.setAmount(1200);
+        Object obj = userDAO.save(user);
+        mv.addObject("data", obj.toString());
         return mv;
     }
 }
