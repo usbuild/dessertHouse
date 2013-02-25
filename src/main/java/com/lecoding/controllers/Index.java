@@ -10,7 +10,12 @@ public class Index {
     @RequestMapping("/")
     public ModelAndView index() throws Exception {
         ModelAndView mv = new ModelAndView("index");
-//        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[0];
         return mv;
     }
+
+    @RequestMapping("/restrict")
+    public void restrict() throws Exception {
+        System.out.println("Hello");
+    }
+
 }
