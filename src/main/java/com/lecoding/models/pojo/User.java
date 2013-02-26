@@ -36,6 +36,19 @@ public class User implements Serializable {
         this.name = name;
     }
 
+
+    private String password;
+
+    @javax.persistence.Column(name = "password", nullable = false, insertable = true, updatable = true, length = 40, precision = 0)
+    @Basic
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     private String role;
 
     @javax.persistence.Column(name = "role", nullable = false, insertable = true, updatable = true, length = 9, precision = 0)

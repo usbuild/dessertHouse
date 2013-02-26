@@ -11,4 +11,5 @@ import com.lecoding.models.pojo.Customer;
 public interface ICustomerService {
     boolean add(Customer customer);
     Customer findById(int id);
+    Customer findByName(String name);
 }

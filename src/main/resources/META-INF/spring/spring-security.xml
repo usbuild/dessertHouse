@@ -8,20 +8,34 @@
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 
-    <security:http auto-config="true" use-expressions="true" access-denied-page="/auth/denied">
-        <security:intercept-url pattern="/auth/login" access="permitAll"/>
-        <intercept-url pattern="/index/restrict*" access="ROLE_USER"/>
-        <security:form-login login-page="/auth/login" authentication-failure-url="/auth/login?error=true"
-                             default-target-url="/main/common"/>
-        <security:logout invalidate-session="true" logout-success-url="/auth/login" logout-url="/auth/logout"/>
-    </security:http>
+    <!-- i18n -->
+    <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basename" value="classpath:META-INF/myMessage"/>
+    </beans:bean>
 
-    <security:authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="mkyong" password="123456" authorities="ROLE_USER"/>
-            </user-service>
-        </authentication-provider>
+    <!--<security:http auto-config="true" use-expressions="true" access-denied-page="/auth/denied">-->
+    <security:http auto-config="true" use-expressions="true" authentication-manager-ref="userAuthentication"
+                   pattern="/user*">
+        <security:remember-me key="dessert-cus" user-service-ref="userDetailService"/>
+        <security:intercept-url pattern="/user/login" access="permitAll"/>
+        <security:intercept-url pattern="/**" access="hasRole('EMPLOYEE')"/>
+        <security:form-login login-page="/user/login" authentication-failure-url="/user/login?error=true"
+                             default-target-url="/user/" always-use-default-target="true"/>
+        <!--<security:logout invalidate-session="true" logout-success-url="/auth/login" logout-url="/auth/logout"/>-->
+    </security:http>
+    <security:authentication-manager id="userAuthentication">
+        <security:authentication-provider user-service-ref="userDetailService"/>
+    </security:authentication-manager>
+
+    <beans:bean id="userDetailService" class="com.lecoding.components.UserAuthService"/>
+
+    <security:http auto-config="true" authentication-manager-ref="customerAuthentication" pattern="/**">
+        <security:remember-me key="dessert-user" user-service-ref="customerDetailService"/>
+        <intercept-url pattern="/index/user*" access="ROLE_USER"/>
+    </security:http>
+    <beans:bean id="customerDetailService" class="com.lecoding.components.CustomerAuthService"/>
+    <security:authentication-manager id="customerAuthentication">
+        <security:authentication-provider user-service-ref="customerDetailService"/>
     </security:authentication-manager>
 
 </beans:beans>

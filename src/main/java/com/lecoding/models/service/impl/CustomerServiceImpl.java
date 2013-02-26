@@ -5,9 +5,12 @@ import com.lecoding.models.pojo.Customer;
 import com.lecoding.models.service.ICustomerService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,5 +38,13 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional
     public Customer findById(int id) {
         return customerDAO.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public Customer findByName(String name) {
+        List<Customer> list = customerDAO.findByCriteria(Restrictions.eq("name", name));
+        if (list.isEmpty()) return null;
+        else return list.get(0);
     }
 }
