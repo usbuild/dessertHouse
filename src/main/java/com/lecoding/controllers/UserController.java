@@ -16,7 +16,7 @@ import java.util.Collection;
  */
 @Controller
 @RequestMapping("/user")
-public class Admin {
+public class UserController {
     @RequestMapping("/login")
     public ModelAndView login() {
         return new ModelAndView("admin/login");

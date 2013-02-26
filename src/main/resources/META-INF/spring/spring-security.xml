@@ -18,7 +18,10 @@
                    pattern="/user*">
         <security:remember-me key="dessert-cus" user-service-ref="userDetailService"/>
         <security:intercept-url pattern="/user/login" access="permitAll"/>
-        <security:intercept-url pattern="/**" access="hasRole('EMPLOYEE')"/>
+        <security:intercept-url pattern="/user/employee*" access="hasRole('EMPLOYEE')"/>
+        <security:intercept-url pattern="/user/manager*" access="hasRole('MANAGER')"/>
+        <security:intercept-url pattern="/user/admin*" access="hasRole('ADMIN')"/>
+
         <security:form-login login-page="/user/login" authentication-failure-url="/user/login?error=true"
                              default-target-url="/user/" always-use-default-target="true"/>
         <!--<security:logout invalidate-session="true" logout-success-url="/auth/login" logout-url="/auth/logout"/>-->
@@ -27,11 +30,15 @@
         <security:authentication-provider user-service-ref="userDetailService"/>
     </security:authentication-manager>
 
-    <beans:bean id="userDetailService" class="com.lecoding.components.UserAuthService"/>
 
-    <security:http auto-config="true" authentication-manager-ref="customerAuthentication" pattern="/**">
+    <beans:bean id="userDetailService" class="com.lecoding.components.UserAuthService"/>
+    <security:http auto-config="true" use-expressions="true" authentication-manager-ref="customerAuthentication"
+                   pattern="/customer/**">
         <security:remember-me key="dessert-user" user-service-ref="customerDetailService"/>
-        <intercept-url pattern="/index/user*" access="ROLE_USER"/>
+        <security:intercept-url pattern="/customer/login" access="permitAll"/>
+        <intercept-url pattern="/customer/**" access="hasRole('CUSTOMER')"/>
+        <security:form-login login-page="/customer/login" authentication-failure-url="/customer/login?error=true"
+                             default-target-url="/customer/" always-use-default-target="true"/>
     </security:http>
     <beans:bean id="customerDetailService" class="com.lecoding.components.CustomerAuthService"/>
     <security:authentication-manager id="customerAuthentication">

@@ -10,7 +10,9 @@
     seajs.config({
         alias: {
             'jquery': 'lib/jquery-1.9.1.min.js',
-            'bootstrap': 'lib/bootstrap/js/bootstrap.min.js'
+            'bootstrap': 'lib/bootstrap/js/bootstrap.min.js',
+            'underscore': 'lib/underscore-min.js',
+            'backbone': 'lib/backbone-min.js'
         },
         base: '/static',
         plugins: ['text', 'shim'],
@@ -24,7 +26,7 @@
         }
     });
 
-    seajs.use(['bootstrap'], function(){
+    seajs.use(['bootstrap'], function () {
     });
 </script>
 <link type="text/css" rel="stylesheet" href="/static/lib/bootstrap/css/bootstrap.min.css"/>
