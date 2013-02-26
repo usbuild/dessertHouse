@@ -1,11 +1,8 @@
 package com.lecoding.models.dao.impl;
 
 import com.lecoding.models.dao.IUserDAO;
-import com.lecoding.models.pojo.User;
-import org.hibernate.criterion.Restrictions;
+import com.lecoding.models.po.User;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

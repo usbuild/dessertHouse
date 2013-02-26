@@ -1,7 +1,7 @@
 package com.lecoding.models.dao;
 
-import com.lecoding.models.pojo.Goods;
-import com.lecoding.models.pojo.Reserve;
+import com.lecoding.models.po.Goods;
+import com.lecoding.models.po.Reserve;
 
 import java.util.Map;
 

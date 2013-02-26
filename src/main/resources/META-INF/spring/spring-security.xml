@@ -36,6 +36,7 @@
                    pattern="/customer/**">
         <security:remember-me key="dessert-user" user-service-ref="customerDetailService"/>
         <security:intercept-url pattern="/customer/login" access="permitAll"/>
+        <security:intercept-url pattern="/customer/signup" access="permitAll"/>
         <intercept-url pattern="/customer/**" access="hasRole('CUSTOMER')"/>
         <security:form-login login-page="/customer/login" authentication-failure-url="/customer/login?error=true"
                              default-target-url="/customer/" always-use-default-target="true"/>

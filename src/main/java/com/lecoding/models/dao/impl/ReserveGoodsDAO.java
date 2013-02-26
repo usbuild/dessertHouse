@@ -1,7 +1,7 @@
 package com.lecoding.models.dao.impl;
 
 import com.lecoding.models.dao.IReserveGoodsDAO;
-import com.lecoding.models.pojo.ReserveGoods;
+import com.lecoding.models.po.ReserveGoods;
 
 /**
  * Created with IntelliJ IDEA.

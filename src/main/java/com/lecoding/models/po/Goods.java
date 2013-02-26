@@ -1,8 +1,6 @@
-package com.lecoding.models.pojo;
+package com.lecoding.models.po;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -10,9 +8,8 @@ import java.io.Serializable;
  * User: Usbuild
  * DateTime: 13-2-3-下午3:44
  */
-@javax.persistence.Table(name = "history_goods", schema = "", catalog = "dessert")
 @Entity
-public class HistoryGoods  implements Serializable {
+public class Goods implements Serializable {
     private int id;
 
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
@@ -61,16 +58,28 @@ public class HistoryGoods  implements Serializable {
         this.price = price;
     }
 
-    private int type;
+    private int amount;
 
-    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @javax.persistence.Column(name = "amount", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Basic
-    public int getType() {
-        return type;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    private GoodsType goodsType;
+
+    @OneToOne
+    @JoinColumn(name = "type")
+    public GoodsType getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(GoodsType goodsType) {
+        this.goodsType = goodsType;
     }
 
     @Override
@@ -78,13 +87,13 @@ public class HistoryGoods  implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        HistoryGoods that = (HistoryGoods) o;
+        Goods goods = (Goods) o;
 
-        if (id != that.id) return false;
-        if (Double.compare(that.price, price) != 0) return false;
-        if (type != that.type) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (sid != null ? !sid.equals(that.sid) : that.sid != null) return false;
+        if (amount != goods.amount) return false;
+        if (id != goods.id) return false;
+        if (Double.compare(goods.price, price) != 0) return false;
+        if (name != null ? !name.equals(goods.name) : goods.name != null) return false;
+        if (sid != null ? !sid.equals(goods.sid) : goods.sid != null) return false;
 
         return true;
     }
@@ -98,7 +107,7 @@ public class HistoryGoods  implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + type;
+        result = 31 * result + amount;
         return result;
     }
 }

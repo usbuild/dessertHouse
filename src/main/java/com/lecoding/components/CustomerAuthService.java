@@ -1,6 +1,6 @@
 package com.lecoding.components;
 
-import com.lecoding.models.pojo.Customer;
+import com.lecoding.models.po.Customer;
 import com.lecoding.models.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

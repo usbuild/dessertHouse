@@ -1,6 +1,6 @@
 package com.lecoding.models.service;
 
-import com.lecoding.models.pojo.User;
+import com.lecoding.models.po.User;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,7 +1,7 @@
 package com.lecoding.models.service.impl;
 
 import com.lecoding.models.dao.ICustomerDAO;
-import com.lecoding.models.pojo.Customer;
+import com.lecoding.models.po.Customer;
 import com.lecoding.models.service.ICustomerService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;

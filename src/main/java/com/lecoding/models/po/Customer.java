@@ -1,4 +1,6 @@
-package com.lecoding.models.pojo;
+package com.lecoding.models.po;
+
+import com.lecoding.components.GenderType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -64,18 +66,6 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    private String salt;
-
-    @Column(name = "salt", nullable = false)
-    @Basic
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     private int amount;
 
     @Column(name = "amount", nullable = false)
@@ -138,7 +128,6 @@ public class Customer implements Serializable {
         if (gender != null ? !gender.equals(customer.gender) : customer.gender != null) return false;
         if (name != null ? !name.equals(customer.name) : customer.name != null) return false;
         if (password != null ? !password.equals(customer.password) : customer.password != null) return false;
-        if (salt != null ? !salt.equals(customer.salt) : customer.salt != null) return false;
         if (status != null ? !status.equals(customer.status) : customer.status != null) return false;
 
         return true;
@@ -149,7 +138,6 @@ public class Customer implements Serializable {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + amount;
         result = 31 * result + (gender != null ? gender.hashCode() : 0);

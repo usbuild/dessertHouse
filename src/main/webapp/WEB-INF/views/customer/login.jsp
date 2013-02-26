@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>工作人员登录</title>
+    <title>用户登录</title>
     <jsp:include page="../libs.jsp"/>
     <script type="text/javascript">
         seajs.use(['jquery'], function ($) {

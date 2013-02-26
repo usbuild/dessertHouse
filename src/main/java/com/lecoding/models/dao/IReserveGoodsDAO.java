@@ -1,6 +1,6 @@
 package com.lecoding.models.dao;
 
-import com.lecoding.models.pojo.ReserveGoods;
+import com.lecoding.models.po.ReserveGoods;
 
 /**
  * Created with IntelliJ IDEA.

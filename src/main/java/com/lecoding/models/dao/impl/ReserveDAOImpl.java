@@ -1,9 +1,9 @@
 package com.lecoding.models.dao.impl;
 
 import com.lecoding.models.dao.IReserveDAO;
-import com.lecoding.models.pojo.Goods;
-import com.lecoding.models.pojo.GoodsType;
-import com.lecoding.models.pojo.Reserve;
+import com.lecoding.models.po.Goods;
+import com.lecoding.models.po.GoodsType;
+import com.lecoding.models.po.Reserve;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 

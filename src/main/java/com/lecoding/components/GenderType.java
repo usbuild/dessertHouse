@@ -1,4 +1,4 @@
-package com.lecoding.models.pojo;
+package com.lecoding.components;
 
 
 /**

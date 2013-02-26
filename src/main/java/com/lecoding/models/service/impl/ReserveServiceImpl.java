@@ -1,8 +1,8 @@
 package com.lecoding.models.service.impl;
 
 import com.lecoding.models.dao.IReserveDAO;
-import com.lecoding.models.pojo.Goods;
-import com.lecoding.models.pojo.Reserve;
+import com.lecoding.models.po.Goods;
+import com.lecoding.models.po.Reserve;
 import com.lecoding.models.service.IReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

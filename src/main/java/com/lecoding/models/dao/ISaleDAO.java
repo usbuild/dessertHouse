@@ -1,6 +1,6 @@
 package com.lecoding.models.dao;
 
-import com.lecoding.models.pojo.Sale;
+import com.lecoding.models.po.Sale;
 
 /**
  * Created with IntelliJ IDEA.

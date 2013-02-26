@@ -1,7 +1,7 @@
 package com.lecoding.models.dao.impl;
 
 import com.lecoding.models.dao.ICustomerDAO;
-import com.lecoding.models.pojo.Customer;
+import com.lecoding.models.po.Customer;
 import org.springframework.stereotype.Repository;
 
 /**

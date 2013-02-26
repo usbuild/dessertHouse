@@ -1,7 +1,7 @@
 package com.lecoding.models.service.impl;
 
 import com.lecoding.models.dao.IUserDAO;
-import com.lecoding.models.pojo.User;
+import com.lecoding.models.po.User;
 import com.lecoding.models.service.IUserService;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;

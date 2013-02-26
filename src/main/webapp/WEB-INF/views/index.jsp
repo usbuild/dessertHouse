@@ -12,5 +12,6 @@
 </head>
 <body class="index-body">
 <a href="/customer/login" class="btn">用户登录</a>
+<a href="/customer/signup" class="btn">用户注册</a>
 </body>
 </html>

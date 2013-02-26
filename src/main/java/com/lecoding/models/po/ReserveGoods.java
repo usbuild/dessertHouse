@@ -1,4 +1,4 @@
-package com.lecoding.models.pojo;
+package com.lecoding.models.po;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,7 +1,7 @@
 package com.lecoding.models.dao.impl;
 
 import com.lecoding.models.dao.IGoodsDAO;
-import com.lecoding.models.pojo.Goods;
+import com.lecoding.models.po.Goods;
 
 /**
  * Created with IntelliJ IDEA.
