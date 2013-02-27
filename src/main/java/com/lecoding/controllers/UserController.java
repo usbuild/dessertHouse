@@ -30,12 +30,12 @@ public class UserController {
 
         for (GrantedAuthority authority : list) {
             if (authority.getAuthority().equals("EMPLOYEE")) {
-                return "redirect:/user/employee";
+                return "redirect:/user/employee/";
             } else if (authority.getAuthority().equals("MANAGER")) {
-                return "redirect:/user/manager";
+                return "redirect:/user/manager/";
 
             } else if (authority.getAuthority().equals("ADMIN")) {
-                return "redirect:/user/admin";
+                return "redirect:/user/admin/";
             }
         }
         return "forward:/user/login";

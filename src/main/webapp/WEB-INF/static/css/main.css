@@ -35,3 +35,7 @@ input[type=submit] {
     border: solid 2px #CCC;
     border-radius: 10px;
 }
+
+.signup-form span.alert {
+    display: block;
+}

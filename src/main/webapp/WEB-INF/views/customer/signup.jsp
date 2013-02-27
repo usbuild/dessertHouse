@@ -15,7 +15,7 @@
 <body>
 <div class="signup-form">
     <form:form modelAttribute="customerSignUpForm" cssClass="form-horizontal">
-        <form:errors path="*"/>
+        <form:errors path="*" cssClass="alert alert-error"/>
         <form:label path="name">用户名:</form:label><form:input path="name"/>
         <form:label path="password">密码:</form:label><form:password path="password"/>
         <form:label path="repassword">确认密码:</form:label><form:password path="repassword"/><br><br>

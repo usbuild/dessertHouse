@@ -4,8 +4,14 @@ import com.lecoding.controllers.forms.CustomerSignUpForm;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -27,6 +35,10 @@ public class CustomerController {
 
     @Autowired
     ICustomerService customerService;
+
+    @Autowired
+    @Qualifier("customerAuthentication")
+    protected AuthenticationManager customerAuthentication;
 
     @RequestMapping("/")
     public ModelAndView index() {
@@ -47,7 +59,8 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signup_post(@Valid CustomerSignUpForm customerSignUpForm, BindingResult bindingResult) {
+    public String signup_post(@Valid CustomerSignUpForm customerSignUpForm, BindingResult bindingResult,
+                              HttpServletRequest request, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             return "customer/signup";
         } else {
@@ -61,7 +74,13 @@ public class CustomerController {
             customer.setPassword(encoder.encodePassword(customerSignUpForm.getPassword(), customer.getName()));
 
             if (customerService.add(customer)) {
-                return "redirect:/customer/login";
+
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(customerSignUpForm.getName(), customerSignUpForm.getPassword());
+                request.getSession();
+                token.setDetails(new WebAuthenticationDetails(request));
+                Authentication authentication = customerAuthentication.authenticate(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return "redirect:/customer/";
             } else {
                 bindingResult.addError(new ObjectError("dberror", "输入数据库失败"));
                 return "customer/signup";
