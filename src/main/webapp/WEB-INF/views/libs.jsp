@@ -5,23 +5,29 @@
   Time: 下午2:55
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script type="text/javascript" src="/static/lib/seajs/sea.js"></script>
+<script type="text/javascript" src="/static/lib/require.js"></script>
 <script type="text/javascript">
-    seajs.config({
-        alias: {
-            'jquery': 'lib/jquery-1.9.1.min.js',
-            'bootstrap': 'lib/bootstrap/js/bootstrap.min.js',
-            'underscore': 'lib/underscore-min.js',
-            'backbone': 'lib/backbone-min.js'
+    require.config({
+        baseUrl: '/static',
+        paths: {
+            'jquery': 'lib/jquery-1.9.1.min',
+            'bootstrap': 'lib/bootstrap/js/bootstrap.min',
+            'underscore': 'lib/underscore-min',
+            'backbone': 'lib/backbone-min'
         },
-        base: '/static',
-        plugins: ['text', 'shim'],
 
         shim: {
             'jquery': {
                 exports: 'jQuery'
             },
+            'underscore': {
+                exports: '_'
+            },
+            'backbone': {
+                deps: ['underscore']
+            },
             'bootstrap': {
+                deps: ['jquery']
             }
         }
     });

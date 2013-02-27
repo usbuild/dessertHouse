@@ -6,7 +6,6 @@ import com.lecoding.models.po.Reserve;
 import com.lecoding.models.service.IReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -21,13 +20,11 @@ public class ReserveServiceImpl implements IReserveService {
     IReserveDAO orderDAO;
 
     @Override
-    @Transactional
     public Reserve findById(int id) {
         return orderDAO.findById(id);
     }
 
     @Override
-    @Transactional
     public Map<Goods, Integer> getGoodsList(int orderId) {
         return orderDAO.getGoodsList(orderId);
     }

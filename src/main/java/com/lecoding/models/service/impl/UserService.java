@@ -6,7 +6,6 @@ import com.lecoding.models.service.IUserService;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class UserService implements IUserService {
     IUserDAO userDAO;
 
     @Override
-    @Transactional
     public User findByName(String name) {
         List<User> users = userDAO.findByCriteria(Restrictions.eq("name", name));
         if (users.isEmpty()) return null;

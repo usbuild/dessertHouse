@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,7 +22,6 @@ public class CustomerServiceImpl implements ICustomerService {
     ICustomerDAO customerDAO;
 
     @Override
-    @Transactional
     public boolean add(Customer customer) {
         try {
             customerDAO.save(customer);
@@ -35,13 +33,11 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    @Transactional
     public Customer findById(int id) {
         return customerDAO.findById(id);
     }
 
     @Override
-    @Transactional
     public Customer findByName(String name) {
         List<Customer> list = customerDAO.findByCriteria(Restrictions.eq("name", name));
         if (list.isEmpty()) return null;

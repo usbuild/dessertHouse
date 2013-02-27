@@ -43,8 +43,10 @@ public class CustomerController {
     @RequestMapping("/")
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView("customer/index");
+        mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
         return mv;
     }
+
 
     @RequestMapping("/login")
     public ModelAndView login() {

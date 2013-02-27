@@ -14,7 +14,7 @@
     </beans:bean>
 
     <security:http auto-config="true" use-expressions="true" authentication-manager-ref="userAuthentication"
-                   pattern="/user/**">
+                   pattern="/user/**" access-denied-page="/user/login">
         <security:remember-me key="dessert-cus" user-service-ref="userDetailService"/>
         <security:intercept-url pattern="/user/login" access="permitAll"/>
         <security:intercept-url pattern="/user/employee/**" access="hasRole('EMPLOYEE')"/>
@@ -31,8 +31,9 @@
 
 
     <beans:bean id="userDetailService" class="com.lecoding.components.UserAuthService"/>
+
     <security:http auto-config="true" use-expressions="true" authentication-manager-ref="customerAuthentication"
-                   pattern="/**">
+                   pattern="/**" access-denied-page="/customer/login">
         <security:remember-me key="dessert-user" user-service-ref="customerDetailService"/>
 
         <security:intercept-url pattern="/customer/login" access="permitAll"/>
@@ -42,6 +43,7 @@
         <security:form-login login-page="/customer/login" authentication-failure-url="/customer/login?error=true"
                              default-target-url="/customer/" always-use-default-target="true"/>
     </security:http>
+
     <beans:bean id="customerDetailService" class="com.lecoding.components.CustomerAuthService"/>
     <security:authentication-manager id="customerAuthentication">
         <security:authentication-provider user-service-ref="customerDetailService">

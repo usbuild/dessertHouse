@@ -39,3 +39,38 @@ input[type=submit] {
 .signup-form span.alert {
     display: block;
 }
+
+.customer-profile-container {
+    width: 230px;
+    border: solid 1px #CCC;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 10;
+    left: -180px;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.69);
+}
+
+.customer-profile-container td {
+    padding: 7px;
+    font-size: 13px;
+}
+
+.customer-exit {
+    display: block;
+    float: right;
+}
+
+.customer-container {
+    height: 1000px;
+    width: 990px;
+    border: solid 1px #CCC;
+    margin: 0 auto;
+    box-shadow: 2px 5px 10px #CCC;
+    background-color: white;
+    padding: 10px 20px;
+}
+.customer-body{
+    background-color: #EEE;
+}
