@@ -43,7 +43,11 @@
     </security:http>
     <beans:bean id="customerDetailService" class="com.lecoding.components.CustomerAuthService"/>
     <security:authentication-manager id="customerAuthentication">
-        <security:authentication-provider user-service-ref="customerDetailService"/>
+        <security:authentication-provider user-service-ref="customerDetailService">
+            <security:password-encoder hash="md5">
+                <security:salt-source user-property="username"/>
+            </security:password-encoder>
+        </security:authentication-provider>
     </security:authentication-manager>
 
 </beans:beans>

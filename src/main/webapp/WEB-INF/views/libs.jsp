@@ -26,8 +26,6 @@
         }
     });
 
-    seajs.use(['bootstrap'], function () {
-    });
 </script>
 <link type="text/css" rel="stylesheet" href="/static/lib/bootstrap/css/bootstrap.min.css"/>
 <link type="text/css" rel="stylesheet" href="/static/css/main.css"/>

@@ -27,3 +27,11 @@ input[type=submit] {
 .index-body {
     background-image: url("/static/images/index_header.jpg");
 }
+
+.signup-form {
+    width: 200px;
+    margin: 50px auto 10px auto;
+    padding: 10px 20px;
+    border: solid 2px #CCC;
+    border-radius: 10px;
+}

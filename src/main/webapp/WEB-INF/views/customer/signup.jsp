@@ -13,12 +13,14 @@
     <jsp:include page="../libs.jsp"/>
 </head>
 <body>
-<form:form modelAttribute="customerForm">
-    <form:errors/>
-    <form:label path="name">用户名:</form:label><form:input path="name"/>
-    <form:label path="name">密码:</form:label><form:password path="password"/>
-    <%--<label for="re-password">确认密码:</label><input type="text" id="re-password"/>--%>
-    <input type="submit" value="提交" class="btn btn-primary">
-</form:form>
+<div class="signup-form">
+    <form:form modelAttribute="customerSignUpForm" cssClass="form-horizontal">
+        <form:errors path="*"/>
+        <form:label path="name">用户名:</form:label><form:input path="name"/>
+        <form:label path="password">密码:</form:label><form:password path="password"/>
+        <form:label path="repassword">确认密码:</form:label><form:password path="repassword"/><br><br>
+        <input type="submit" value="提交" class="btn btn-primary">
+    </form:form>
+</div>
 </body>
 </html>
