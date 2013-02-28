@@ -1,7 +1,11 @@
 package com.lecoding.controllers;
 
+import com.lecoding.controllers.forms.ChangePassForm;
+import com.lecoding.controllers.forms.CustomerInfoForm;
 import com.lecoding.controllers.forms.CustomerSignUpForm;
+import com.lecoding.models.po.Area;
 import com.lecoding.models.po.Customer;
+import com.lecoding.models.service.IAreaService;
 import com.lecoding.models.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,13 +20,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +45,9 @@ public class CustomerController {
     ICustomerService customerService;
 
     @Autowired
+    IAreaService areaService;
+
+    @Autowired
     @Qualifier("customerAuthentication")
     protected AuthenticationManager customerAuthentication;
 
@@ -47,19 +58,50 @@ public class CustomerController {
         return mv;
     }
 
-    @RequestMapping(value = "/reload", headers = "X-Requested-With=XMLHttpRequest")
-    public String reload(Model model) {
+    @RequestMapping(value = "/pay", headers = "X-Requested-With=XMLHttpRequest")
+    public String pay(Model model) {
         model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
-        return "customer/reload";
+        return "customer/pay";
     }
+
+    @RequestMapping(value = "/changepass", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
+    public String changePass(Model model) {
+        model.addAttribute("passForm", new ChangePassForm());
+        return "customer/changepass";
+    }
+
+    @RequestMapping(value = "/changepass", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
+    @ResponseBody
+    public String aChangePass(@ModelAttribute("passForm") @Valid ChangePassForm passForm) {
+        return null;
+    }
+
 
     @RequestMapping(value = "/account", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String account(Model model) {
-        model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        Customer user = customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        CustomerInfoForm form = new CustomerInfoForm();
+        form.setAge(user.getAge());
+        form.setArea_id(user.getArea().getId());
+        form.setGender(user.getGender());
+        model.addAttribute("user", form);
+
+        Map<Integer, String> map = new HashMap<Integer, String>();
+        for (Area area : areaService.findAll()) {
+            map.put(area.getId(), area.getName());
+        }
+        model.addAttribute("areas", map);
         return "customer/account";
     }
 
-    @RequestMapping({"/", "", "/account", "/reload"})
+    @RequestMapping(value = "/account", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
+    @ResponseBody
+    public String aAccount(@ModelAttribute("user") @Valid CustomerInfoForm infoForm) {
+        return null;
+    }
+
+
+    @RequestMapping({"/", "", "/account", "/pay", "/changepass"})
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView("customer/main");
         mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));

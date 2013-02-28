@@ -13,7 +13,8 @@
             'jquery': 'lib/jquery-1.9.1.min',
             'bootstrap': 'lib/bootstrap/js/bootstrap.min',
             'underscore': 'lib/underscore-min',
-            'backbone': 'lib/backbone-min'
+            'backbone': 'lib/backbone-min',
+            'jquery.form': 'lib/jquery.form'
         },
 
         shim: {
@@ -28,6 +29,9 @@
                 exports: 'Backbone'
             },
             'bootstrap': {
+                deps: ['jquery']
+            },
+            'jquery.form': {
                 deps: ['jquery']
             }
         }

@@ -21,7 +21,7 @@
                         "customer/account": "account",
                         "customer/": "index",
                         "customer": "index",
-                        "customer/reload": "reload"
+                        "customer/pay": "pay"
                     },
 
                     account: function () {
@@ -39,8 +39,8 @@
                             });
                         });
                     },
-                    reload: function () {
-                        $.get("/customer/reload", {}, function (data) {
+                    pay: function () {
+                        $.get("/customer/pay", {}, function (data) {
                             $(".customer-container").slideUp(function () {
                                 $(this).html(data).slideDown();
                             });
@@ -145,11 +145,12 @@
                                 <tr>
                                     <td>账户余额：</td>
                                     <td>${user.amount}</td>
-                                    <td><a href="/customer/reload">立即充值</a></td>
+                                    <td><a href="/customer/pay">立即充值</a></td>
                                 </tr>
                                 <tr>
                                     <td>状态：</td>
-                                    <td colspan="2">${user.status}</td>
+                                    <td>${user.status}</td>
+                                    <td><a href="/customer/changepass">修改密码</a></td>
                                 </tr>
                             </table>
                             <a href="/j_spring_security_logout" class="customer-exit">退出</a>
