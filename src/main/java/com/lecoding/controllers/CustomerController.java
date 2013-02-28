@@ -40,9 +40,28 @@ public class CustomerController {
     @Qualifier("customerAuthentication")
     protected AuthenticationManager customerAuthentication;
 
-    @RequestMapping("/")
-    public ModelAndView index() {
+    @RequestMapping(value = {"/", ""}, headers = "X-Requested-With=XMLHttpRequest")
+    public ModelAndView ajaxIndex() {
         ModelAndView mv = new ModelAndView("customer/index");
+        mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return mv;
+    }
+
+    @RequestMapping(value = "/reload", headers = "X-Requested-With=XMLHttpRequest")
+    public String reload(Model model) {
+        model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "customer/reload";
+    }
+
+    @RequestMapping(value = "/account", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
+    public String account(Model model) {
+        model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "customer/account";
+    }
+
+    @RequestMapping({"/", "", "/account", "/reload"})
+    public ModelAndView index() {
+        ModelAndView mv = new ModelAndView("customer/main");
         mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
         return mv;
     }

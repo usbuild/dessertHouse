@@ -1,13 +1,11 @@
 package com.lecoding.models.service.impl;
 
 import com.lecoding.models.dao.IGoodsDAO;
-import com.lecoding.models.po.Goods;
 import com.lecoding.models.service.IGoodsService;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +19,8 @@ public class GoodsService implements IGoodsService {
     IGoodsDAO goodsDAO;
 
     @Override
-    public List<Goods> searchGoods(String name) {
-        return goodsDAO.findByCriteria(Restrictions.like("name", "%" + name + "%"));
+    public Map searchGoods(String name, int page) {
+        return goodsDAO.searchGoods(name, page, 10);
     }
+
 }

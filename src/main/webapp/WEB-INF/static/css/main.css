@@ -63,7 +63,6 @@ input[type=submit] {
 }
 
 .customer-container {
-    height: 1000px;
     width: 990px;
     border: solid 1px #CCC;
     margin: 0 auto;
@@ -71,6 +70,7 @@ input[type=submit] {
     background-color: white;
     padding: 10px 20px;
 }
-.customer-body{
+
+.customer-body {
     background-color: #EEE;
 }

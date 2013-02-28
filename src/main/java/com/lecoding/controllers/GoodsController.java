@@ -3,11 +3,12 @@ package com.lecoding.controllers;
 import com.lecoding.models.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,9 +22,10 @@ public class GoodsController {
     @Autowired
     IGoodsService goodsService;
 
-    @RequestMapping("/search/{key}")
+    @RequestMapping({"/search/", "/search"})
     @ResponseBody
-    public List searchGoods(@PathVariable String key) {
-        return goodsService.searchGoods(key);
+    public Map searchGoods(@RequestParam String key, @RequestParam int page) throws UnsupportedEncodingException {
+        key = new String(key.getBytes("ISO-8859-1"), "UTF-8");
+        return goodsService.searchGoods(key, page);
     }
 }
