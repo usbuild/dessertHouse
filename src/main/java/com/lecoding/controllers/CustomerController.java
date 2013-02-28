@@ -64,13 +64,13 @@ public class CustomerController {
         return "customer/pay";
     }
 
-    @RequestMapping(value = "/changepass", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
+    @RequestMapping(value = "/password", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String changePass(Model model) {
         model.addAttribute("passForm", new ChangePassForm());
-        return "customer/changepass";
+        return "customer/password";
     }
 
-    @RequestMapping(value = "/changepass", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
+    @RequestMapping(value = "/password", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
     @ResponseBody
     public String aChangePass(@ModelAttribute("passForm") @Valid ChangePassForm passForm) {
         return null;
@@ -101,7 +101,7 @@ public class CustomerController {
     }
 
 
-    @RequestMapping({"/", "", "/account", "/pay", "/changepass"})
+    @RequestMapping({"/", "", "/account", "/pay", "/password"})
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView("customer/main");
         mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));

@@ -14,14 +14,15 @@
     <jsp:include page="../libs.jsp"/>
 
     <script type="text/javascript">
-        require(['bootstrap', 'backbone'], function () {
+        require(['bootstrap', 'backbone', 'jquery.form'], function () {
             $(function () {
                 var Router = Backbone.Router.extend({
                     routes: {
                         "customer/account": "account",
                         "customer/": "index",
                         "customer": "index",
-                        "customer/pay": "pay"
+                        "customer/pay": "pay",
+                        "customer/password": "password"
                     },
 
                     account: function () {
@@ -45,8 +46,16 @@
                                 $(this).html(data).slideDown();
                             });
                         });
+                    },
+                    password: function () {
+                        $.get("/customer/password", {}, function (data) {
+                            $(".customer-container").slideUp(function () {
+                                $(this).html(data).slideDown();
+                            });
+                        });
                     }
                 });
+
                 var router = new Router;
                 Backbone.history.start({pushState: true});
 
@@ -93,6 +102,14 @@
                         page: 0
                     }});
                 });
+
+                $(document).on("submit", "form.ajax-form", function (evt) {
+                    evt.preventDefault();
+                    $.post($(this).attr('action'), $(this).serialize(), function (e) {
+                        console.dir(e);
+                    }, 'json');
+                });
+
 
             });
         });
@@ -150,7 +167,7 @@
                                 <tr>
                                     <td>状态：</td>
                                     <td>${user.status}</td>
-                                    <td><a href="/customer/changepass">修改密码</a></td>
+                                    <td><a href="/customer/password">修改密码</a></td>
                                 </tr>
                             </table>
                             <a href="/j_spring_security_logout" class="customer-exit">退出</a>

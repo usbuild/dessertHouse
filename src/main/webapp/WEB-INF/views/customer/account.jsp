@@ -8,7 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<s:form modelAttribute="user" cssClass="form form-horizontal">
+<s:form modelAttribute="user" cssClass="form form-horizontal ajax-form">
     <fieldset>
         <legend>个人信息</legend>
         <div class="control-group">
@@ -36,7 +36,11 @@
                 <s:select path="area_id" items="${areas}"/>
             </div>
         </div>
-
-        <input type="submit" class="btn" value="提交"/>
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" class="btn btn-primary" value="提交"/>
+                <button class="btn btn-danger">暂停帐号</button>
+            </div>
+        </div>
     </fieldset>
 </s:form>
