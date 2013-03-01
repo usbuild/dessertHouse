@@ -43,4 +43,14 @@ public class CustomerServiceImpl implements ICustomerService {
         if (list.isEmpty()) return null;
         else return list.get(0);
     }
+
+    @Override
+    public boolean pay(Customer customer, int money) {
+        customer.setAmount(customer.getAmount() + money);
+        if (money >= 100 && customer.getStatus().equals(Customer.StatusType.nouse)) {
+            customer.setStatus(Customer.StatusType.active);
+        }
+        return this.add(customer);
+    }
+
 }

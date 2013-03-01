@@ -24,6 +24,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,26 @@ public class CustomerController {
     public String pay(Model model) {
         model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
         return "customer/pay";
+    }
+
+    @RequestMapping(value = "/pay", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
+    public String pPay(@RequestParam("amount") int money, Model model) {
+        Customer customer = customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (money >= 100 && customer.getStatus().equals(Customer.StatusType.nouse)) {
+            model.addAttribute("upgrade", true);
+        }
+        if (customerService.pay(customer, money)) {
+            model.addAttribute("success", true);
+        } else {
+            model.addAttribute("fail", true);
+        }
+        return "customer/pay";
+    }
+
+    @RequestMapping(value = "/profile", headers = "X-Requested-With=XMLHttpRequest")
+    public String profile(Model model) {
+        model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "customer/profile";
     }
 
 

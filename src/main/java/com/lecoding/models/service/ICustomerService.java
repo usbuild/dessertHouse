@@ -12,4 +12,5 @@ public interface ICustomerService {
     boolean add(Customer customer);
     Customer findById(int id);
     Customer findByName(String name);
+    public boolean pay(Customer customer, int money);
 }

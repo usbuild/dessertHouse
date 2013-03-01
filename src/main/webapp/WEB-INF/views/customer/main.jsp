@@ -95,6 +95,14 @@
                 });
                 new SearchView({model: searchModel});
 
+                var updateProfile = function () {
+                    $.get("/customer/profile", {}, function (data) {
+                        $(".customer-profile-container").html(data);
+                    });
+                };
+                updateProfile();
+
+
                 $(document).on('click', "#search-btn", function (evt) {
                     evt.preventDefault();
                     searchModel.fetch({data: {
@@ -109,6 +117,7 @@
                     $("form .error-msg").remove();
                     $.post($(this).attr('action'), $(this).serialize(), function (data) {
                         $(".customer-container").html(data);
+                        updateProfile();
                     });
                 });
 
@@ -155,24 +164,7 @@
                     <li class="customer-profile"><a href="#">${user.name}</a>
 
                         <div class="customer-profile-container">
-                            <table>
-                                <tr>
-                                    <td>欢迎您：</td>
-                                    <td>${user.name}</td>
-                                    <td><a href="/customer/account" class="router-link">账户设置</a></td>
-                                </tr>
-                                <tr>
-                                    <td>账户余额：</td>
-                                    <td>${user.amount}</td>
-                                    <td><a href="/customer/pay">立即充值</a></td>
-                                </tr>
-                                <tr>
-                                    <td>状态：</td>
-                                    <td>${user.status}</td>
-                                    <td><a href="/customer/password">修改密码</a></td>
-                                </tr>
-                            </table>
-                            <a href="/j_spring_security_logout" class="customer-exit">退出</a>
+
                         </div>
                     </li>
 
