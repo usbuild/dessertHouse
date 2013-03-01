@@ -3,6 +3,7 @@ package com.lecoding.models.service.impl;
 import com.lecoding.models.dao.ICustomerDAO;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.service.ICustomerService;
+import com.lecoding.models.service.IPayRecordService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
@@ -20,6 +21,9 @@ import java.util.List;
 public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     ICustomerDAO customerDAO;
+
+    @Autowired
+    IPayRecordService payRecordService;
 
     @Override
     public boolean add(Customer customer) {
@@ -50,7 +54,7 @@ public class CustomerServiceImpl implements ICustomerService {
         if (money >= 100 && customer.getStatus().equals(Customer.StatusType.nouse)) {
             customer.setStatus(Customer.StatusType.active);
         }
-        return this.add(customer);
+        return this.add(customer) && payRecordService.insert(customer, money);
     }
 
 }

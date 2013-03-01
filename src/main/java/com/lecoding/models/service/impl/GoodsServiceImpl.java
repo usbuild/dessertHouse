@@ -13,7 +13,7 @@ import java.util.Map;
  * DateTime: 13-2-27 下午9:45
  */
 @Service
-public class GoodsService implements IGoodsService {
+public class GoodsServiceImpl implements IGoodsService {
 
     @Autowired
     IGoodsDAO goodsDAO;
