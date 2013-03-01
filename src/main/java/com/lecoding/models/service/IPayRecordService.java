@@ -1,6 +1,9 @@
 package com.lecoding.models.service;
 
 import com.lecoding.models.po.Customer;
+import com.lecoding.models.po.PayRecord;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,4 +12,5 @@ import com.lecoding.models.po.Customer;
  */
 public interface IPayRecordService {
     boolean insert(Customer customer, int amount);
+    List<PayRecord> listRecord(Customer customer);
 }

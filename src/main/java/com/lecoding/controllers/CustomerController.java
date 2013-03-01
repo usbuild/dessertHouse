@@ -7,6 +7,7 @@ import com.lecoding.models.po.Area;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.service.IAreaService;
 import com.lecoding.models.service.ICustomerService;
+import com.lecoding.models.service.IPayRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,6 +48,9 @@ public class CustomerController {
     IAreaService areaService;
 
     @Autowired
+    IPayRecordService payRecordService;
+
+    @Autowired
     @Qualifier("customerAuthentication")
     protected AuthenticationManager customerAuthentication;
 
@@ -59,7 +63,9 @@ public class CustomerController {
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String pay(Model model) {
-        model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        Customer customer = customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        model.addAttribute("user", customer);
+        model.addAttribute("records", payRecordService.listRecord(customer));
         return "customer/pay";
     }
 
@@ -74,6 +80,7 @@ public class CustomerController {
         } else {
             model.addAttribute("fail", true);
         }
+        model.addAttribute("records", payRecordService.listRecord(customer));
         return "customer/pay";
     }
 

@@ -6,8 +6,11 @@ import com.lecoding.models.po.PayRecord;
 import com.lecoding.models.service.IPayRecordService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,5 +35,10 @@ public class PayRecordService implements IPayRecordService {
             Logger.getLogger(this.getClass()).log(Level.ERROR, ex.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<PayRecord> listRecord(Customer customer) {
+        return payRecordDAO.findByCriteria(Restrictions.eq("customer", customer));
     }
 }
