@@ -8,11 +8,6 @@
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 
-    <!-- i18n -->
-    <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <beans:property name="basename" value="classpath:META-INF/myMessage"/>
-    </beans:bean>
-
     <security:http auto-config="true" use-expressions="true" authentication-manager-ref="userAuthentication"
                    pattern="/user/**" access-denied-page="/user/login">
         <security:remember-me key="dessert-cus" user-service-ref="userDetailService"/>

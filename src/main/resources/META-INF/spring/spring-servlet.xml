@@ -14,7 +14,6 @@
     <context:component-scan base-package="com.lecoding.controllers">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-    <mvc:view-controller path="/" view-name="forward:/index/" />
     <mvc:default-servlet-handler/>
     <mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
 
