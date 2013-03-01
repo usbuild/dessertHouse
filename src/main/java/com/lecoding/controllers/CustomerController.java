@@ -10,6 +10,7 @@ import com.lecoding.models.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -23,14 +24,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,11 +56,12 @@ public class CustomerController {
         return mv;
     }
 
-    @RequestMapping(value = "/pay", headers = "X-Requested-With=XMLHttpRequest")
+    @RequestMapping(value = "/pay", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String pay(Model model) {
         model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
         return "customer/pay";
     }
+
 
     @RequestMapping(value = "/password", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String changePass(Model model) {
@@ -71,9 +70,28 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
-    @ResponseBody
-    public String aChangePass(@ModelAttribute("passForm") @Valid ChangePassForm passForm) {
-        return null;
+    public String aChangePass(@ModelAttribute("passForm") @Valid ChangePassForm passForm, BindingResult bindingResult, Model model) {
+        if (!bindingResult.hasErrors()) {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                    username,
+                    passForm.getOldPassword()
+            );
+            try {
+                customerAuthentication.authenticate(token);
+                Customer customer = customerService.findByName(username);
+                PasswordEncoder encoder = new Md5PasswordEncoder();
+                customer.setPassword(encoder.encodePassword(passForm.getPassword(), customer.getName()));
+                if (customerService.add(customer)) {
+                    model.addAttribute("success", true);
+                } else {
+                    bindingResult.addError(new ObjectError("customer", "修改密码失败"));
+                }
+            } catch (BadCredentialsException ignored) {
+                bindingResult.addError(new ObjectError("oldPassword", "旧密码不正确"));
+            }
+        }
+        return "customer/password";
     }
 
 
@@ -86,18 +104,30 @@ public class CustomerController {
         form.setGender(user.getGender());
         model.addAttribute("user", form);
 
-        Map<Integer, String> map = new HashMap<Integer, String>();
-        for (Area area : areaService.findAll()) {
-            map.put(area.getId(), area.getName());
-        }
-        model.addAttribute("areas", map);
+        model.addAttribute("areas", areaService.allArea());
         return "customer/account";
     }
 
     @RequestMapping(value = "/account", method = RequestMethod.POST, headers = "X-Requested-With=XMLHttpRequest")
-    @ResponseBody
-    public String aAccount(@ModelAttribute("user") @Valid CustomerInfoForm infoForm) {
-        return null;
+    public String aAccount(@ModelAttribute("user") @Valid CustomerInfoForm infoForm, BindingResult bindingResult, Model model) {
+        if (!bindingResult.hasErrors()) {
+            Customer user = customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+            Area area = areaService.findById(infoForm.getArea_id());
+            if (area == null) {
+                bindingResult.addError(new ObjectError("area", "地区不存在"));
+            } else {
+                user.setArea(area);
+                user.setAge(infoForm.getAge());
+                user.setGender(infoForm.getGender());
+                if (!customerService.add(user)) {
+                    bindingResult.addError(new ObjectError("customer", "修改用户失败"));
+                } else {
+                    model.addAttribute("success", true);
+                }
+            }
+        }
+        model.addAttribute("areas", areaService.allArea());
+        return "customer/account";
     }
 
 

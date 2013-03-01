@@ -12,7 +12,7 @@ public class CustomerInfoForm {
 
     GenderType gender;
 
-    @Range(max = 120, min = 10)
+    @Range(max = 120, min = 10, message = "年龄应该在10-120之间")
     private int age;
 
     private int area_id;

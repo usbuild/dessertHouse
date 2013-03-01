@@ -3,6 +3,7 @@ package com.lecoding.models.service;
 import com.lecoding.models.po.Area;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,4 +12,6 @@ import java.util.List;
  */
 public interface IAreaService {
     List<Area> findAll();
+    Map<Integer, String> allArea();
+    Area findById(int id);
 }

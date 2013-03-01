@@ -8,9 +8,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<s:form modelAttribute="user" cssClass="form form-horizontal ajax-form">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<s:form modelAttribute="user" cssClass="form form-horizontal ajax-form" action="/customer/account">
     <fieldset>
         <legend>个人信息</legend>
+        <s:errors path="*" cssClass="alert alert-error error-msg"/>
+        <c:if test="${success}">
+            <div class="alert alert-success error-msg">
+                数据更新成功
+            </div>
+        </c:if>
         <div class="control-group">
             <s:label path="gender" cssClass="control-label">性别</s:label>
             <div class="controls">

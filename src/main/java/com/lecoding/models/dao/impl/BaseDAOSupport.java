@@ -34,7 +34,7 @@ public abstract class BaseDAOSupport<T extends Serializable> implements IBaseDAO
     }
 
     public void save(T t) {
-        getSession().save(t);
+        getSession().saveOrUpdate(t);
     }
 
     @SuppressWarnings("unchecked")

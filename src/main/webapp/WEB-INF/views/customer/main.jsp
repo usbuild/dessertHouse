@@ -103,11 +103,13 @@
                     }});
                 });
 
+
                 $(document).on("submit", "form.ajax-form", function (evt) {
                     evt.preventDefault();
-                    $.post($(this).attr('action'), $(this).serialize(), function (e) {
-                        console.dir(e);
-                    }, 'json');
+                    $("form .error-msg").remove();
+                    $.post($(this).attr('action'), $(this).serialize(), function (data) {
+                        $(".customer-container").html(data);
+                    });
                 });
 
 
