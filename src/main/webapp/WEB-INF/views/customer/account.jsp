@@ -46,7 +46,7 @@
         <div class="control-group">
             <div class="controls">
                 <input type="submit" class="btn btn-primary" value="提交"/>
-                <button class="btn btn-danger">暂停帐号</button>
+                <a class="btn btn-danger cancel-account">注销帐号</a>
             </div>
         </div>
     </fieldset>

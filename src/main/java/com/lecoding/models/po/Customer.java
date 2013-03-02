@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Table(name = "customer")
 public class Customer implements Serializable {
     public static enum StatusType {
-        nouse, active, cancel
+        nouse, active, cancel, pause
     }
 
     private StatusType status = StatusType.nouse;

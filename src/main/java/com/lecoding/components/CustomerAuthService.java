@@ -29,9 +29,15 @@ public class CustomerAuthService implements UserDetailsService {
         } else {
             List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
             authList.add(new SimpleGrantedAuthority("CUSTOMER"));
-            return new org.springframework.security.core.userdetails.User(
-                    customer.getName(), customer.getPassword(), authList
-            );
+            if (customer.getStatus().equals(Customer.StatusType.nouse) || customer.getStatus().equals(Customer.StatusType.active)) {
+                return new org.springframework.security.core.userdetails.User(
+                        customer.getName(), customer.getPassword(), authList
+                );
+            } else {
+                return new org.springframework.security.core.userdetails.User(
+                        customer.getName(), customer.getPassword(), false, true, true, true, authList
+                );
+            }
         }
     }
 }

@@ -53,6 +53,17 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
+    public boolean disable(Customer customer) {
+        customer.setStatus(Customer.StatusType.cancel);
+        try {
+            customerDAO.update(customer);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    @Override
     public Customer findByName(String name) {
         List<Customer> list = customerDAO.findByCriteria(Restrictions.eq("name", name));
         if (list.isEmpty()) return null;

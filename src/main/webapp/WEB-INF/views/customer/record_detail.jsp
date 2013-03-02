@@ -20,7 +20,7 @@
             <td>${status.index + 1}</td>
             <td>${item.store.goods.name}</td>
             <td>${item.store.goods.goodsType.name}</td>
-            <td>${item.store.amount}</td>
+            <td>${item.amount}</td>
             <td>${item.store.price}</td>
         </tr>
     </c:forEach>

@@ -1,10 +1,10 @@
 package com.lecoding.models.po;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,11 +12,13 @@ import java.sql.Timestamp;
  * DateTime: 13-2-3-下午3:44
  */
 @Entity
+@Table(name = "sale")
 public class Sale implements Serializable {
     private int id;
 
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -25,7 +27,7 @@ public class Sale implements Serializable {
         this.id = id;
     }
 
-    private Timestamp createTime;
+    private Timestamp createTime = new Timestamp(System.currentTimeMillis());
 
     @javax.persistence.Column(name = "create_time", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
@@ -35,6 +37,42 @@ public class Sale implements Serializable {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    private int isReserve = 0;
+
+    @Column(name = "is_reserve")
+    @Basic
+    public int getReserve() {
+        return isReserve;
+    }
+
+    public void setReserve(int reserve) {
+        isReserve = reserve;
+    }
+
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    @Column(name = "total")
+    @Basic
+    private double total;
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     @Override
@@ -55,5 +93,22 @@ public class Sale implements Serializable {
         int result = id;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
+    }
+
+    private List<SaleGoods> saleGoods;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sale", fetch = FetchType.EAGER)
+    public List<SaleGoods> getSaleGoods() {
+        return saleGoods;
+    }
+
+    public void setSaleGoods(List<SaleGoods> saleGoods) {
+        this.saleGoods = saleGoods;
+    }
+
+    public void addSaleGoods(SaleGoods saleGoods) {
+        if (this.saleGoods == null) this.saleGoods = new ArrayList<SaleGoods>();
+        saleGoods.setSale(this);
+        this.saleGoods.add(saleGoods);
     }
 }

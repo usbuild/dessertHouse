@@ -1,14 +1,12 @@
 package com.lecoding.models.po;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Usbuild
- * DateTime: 13-2-3-下午3:44
+ * DateTime: 13-2-3-下午4:21
  */
 @javax.persistence.Table(name = "sale_goods", schema = "", catalog = "dessert")
 @Entity
@@ -17,6 +15,7 @@ public class SaleGoods implements Serializable {
 
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -37,15 +36,16 @@ public class SaleGoods implements Serializable {
         this.amount = amount;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SaleGoods saleGoods = (SaleGoods) o;
+        SaleGoods that = (SaleGoods) o;
 
-        if (amount != saleGoods.amount) return false;
-        if (id != saleGoods.id) return false;
+        if (amount != that.amount) return false;
+        if (id != that.id) return false;
 
         return true;
     }
@@ -55,5 +55,29 @@ public class SaleGoods implements Serializable {
         int result = id;
         result = 31 * result + amount;
         return result;
+    }
+
+
+    private Store store;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    private Sale sale;
+
+    @ManyToOne(optional = false)
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
     }
 }

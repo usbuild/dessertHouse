@@ -15,6 +15,8 @@ public interface ICustomerService {
 
     Customer findById(int id);
 
+    boolean disable(Customer customer);
+
     Customer findByName(String name);
 
     public boolean pay(Customer customer, int money);

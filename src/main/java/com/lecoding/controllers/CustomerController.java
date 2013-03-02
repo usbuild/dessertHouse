@@ -1,13 +1,10 @@
 package com.lecoding.controllers;
 
 import com.lecoding.components.Utils;
-import com.lecoding.controllers.forms.ChangePassForm;
-import com.lecoding.controllers.forms.CustomerInfoForm;
-import com.lecoding.controllers.forms.CustomerSignUpForm;
-import com.lecoding.controllers.forms.SearchGoodsForm;
+import com.lecoding.controllers.forms.*;
 import com.lecoding.models.po.Area;
 import com.lecoding.models.po.Customer;
-import com.lecoding.models.po.Reserve;
+import com.lecoding.models.po.Sale;
 import com.lecoding.models.service.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -31,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -55,7 +51,7 @@ public class CustomerController {
     IShopService shopService;
 
     @Autowired
-    IReserveService reserveService;
+    ISaleService saleService;
 
     @Autowired
     @Qualifier("customerAuthentication")
@@ -70,35 +66,43 @@ public class CustomerController {
         return "customer/index";
     }
 
+    @RequestMapping("/disable")
+
+    public @ResponseBody SimpleResponse disableAccount() {
+        if (customerService.disable(customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()))) {
+            SecurityContextHolder.clearContext();
+            return new SimpleResponse(0, null);
+        } else {
+            return new SimpleResponse(1, null);
+        }
+    }
+
 
     @RequestMapping(value = {"/reserve"}, headers = "X-Requested-With=XMLHttpRequest")
     @ResponseBody
-    public Map reserve(@RequestParam Map<String, String> map) {
-        Map<String, Object> result = new HashMap<String, Object>();
+    public SimpleResponse reserve(@RequestParam Map<String, String> map) {
         try {
-            reserveService.addReserve(map, customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
-            result.put("code", 0);
+            saleService.addReserve(map, customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+            return new SimpleResponse(0, null);
         } catch (Exception ex) {
-            result.put("code", 1);
-            result.put("data", ex.getMessage());
+            return new SimpleResponse(1, ex.getMessage());
         }
-        return result;
     }
 
-    @RequestMapping(value = "/reserve/{id}")
+    @RequestMapping(value = "/sale/{id}")
     public String reserveDetail(@PathVariable("id") int id, Model model) {
-        Reserve reserve = reserveService.findById(id);
-        if (reserve == null) return null;
-        Logger.getLogger(this.getClass()).log(Level.ERROR, reserve.getCustomer().getName());
-        if (!reserve.getCustomer().getName().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
+        Sale sale = saleService.findById(id);
+        if (sale == null) return null;
+        Logger.getLogger(this.getClass()).log(Level.ERROR, sale.getCustomer().getName());
+        if (!sale.getCustomer().getName().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
             return null;
-        model.addAttribute("list", reserve.getReserveGoods());
+        model.addAttribute("list", sale.getSaleGoods());
         return "customer/record_detail";
     }
 
     @RequestMapping(value = {"/record"}, headers = "X-Requested-With=XMLHttpRequest")
     public String ajaxRecord(Model model) {
-        model.addAttribute("reserves", reserveService.allReserves(customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName())));
+        model.addAttribute("reserves", saleService.allSales(customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName())));
         return "customer/record";
     }
 

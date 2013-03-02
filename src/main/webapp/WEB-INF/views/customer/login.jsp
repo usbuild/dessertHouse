@@ -12,7 +12,7 @@
     <title>用户登录</title>
     <jsp:include page="../libs.jsp"/>
     <script type="text/javascript">
-        seajs.use(['jquery'], function ($) {
+        require(['jquery'], function ($) {
 
         });
     </script>

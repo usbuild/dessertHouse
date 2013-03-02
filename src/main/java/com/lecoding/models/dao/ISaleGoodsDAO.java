@@ -1,11 +1,11 @@
 package com.lecoding.models.dao;
 
-import com.lecoding.models.po.ReserveGoods;
+import com.lecoding.models.po.SaleGoods;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Usbuild
  * DateTime: 13-2-3-下午4:36
  */
-public interface IReserveGoodsDAO extends IBaseDAO<ReserveGoods> {
+public interface ISaleGoodsDAO extends IBaseDAO<SaleGoods> {
 }
