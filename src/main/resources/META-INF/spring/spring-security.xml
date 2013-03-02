@@ -16,6 +16,7 @@
         <security:intercept-url pattern="/user/manager/**" access="hasRole('MANAGER')"/>
         <security:intercept-url pattern="/user/admin/**" access="hasRole('ADMIN')"/>
         <security:intercept-url pattern="/user/" access="hasAnyRole('EMPLOYEE', 'MANAGER', 'ADMIN')"/>
+        <security:intercept-url pattern="/user" access="hasAnyRole('EMPLOYEE', 'MANAGER', 'ADMIN')"/>
 
         <security:form-login login-page="/user/login" authentication-failure-url="/user/login?error=true"
                              default-target-url="/user/" always-use-default-target="true"/>

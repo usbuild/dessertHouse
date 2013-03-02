@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/user/employee")
 public class EmployeeController {
 
-    @RequestMapping("/")
+    @RequestMapping({"/", ""})
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView("employee/index");
         return mv;

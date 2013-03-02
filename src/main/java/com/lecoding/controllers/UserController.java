@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping("/")
+    @RequestMapping({"/", ""})
     public String index() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<GrantedAuthority> list = (Collection<GrantedAuthority>) userDetails.getAuthorities();

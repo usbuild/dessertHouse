@@ -16,6 +16,7 @@ public class PayRecord implements Serializable {
 
     @javax.persistence.Column(name = "id")
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }

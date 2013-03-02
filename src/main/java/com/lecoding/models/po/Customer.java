@@ -34,6 +34,7 @@ public class Customer implements Serializable {
 
     @Column(name = "id", nullable = false)
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
