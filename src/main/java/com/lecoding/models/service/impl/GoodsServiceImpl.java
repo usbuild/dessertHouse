@@ -5,6 +5,7 @@ import com.lecoding.models.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -19,8 +20,7 @@ public class GoodsServiceImpl implements IGoodsService {
     IGoodsDAO goodsDAO;
 
     @Override
-    public Map searchGoods(String name, int page) {
-        return goodsDAO.searchGoods(name, page, 10);
+    public Map searchGoods(int shop_id, Date date, String key, int page) {
+        return null;
     }
-
 }

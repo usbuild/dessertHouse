@@ -10,7 +10,12 @@ import com.lecoding.models.po.Customer;
 
 public interface ICustomerService {
     boolean add(Customer customer);
+
+    boolean update(Customer customer);
+
     Customer findById(int id);
+
     Customer findByName(String name);
+
     public boolean pay(Customer customer, int money);
 }

@@ -14,7 +14,8 @@
             'bootstrap': 'lib/bootstrap/js/bootstrap.min',
             'underscore': 'lib/underscore-min',
             'backbone': 'lib/backbone-min',
-            'jquery.form': 'lib/jquery.form'
+            'jquery.form': 'lib/jquery.form',
+            'apprise': 'lib/apprise/apprise-1.5.min'
         },
 
         shim: {
@@ -33,11 +34,15 @@
             },
             'jquery.form': {
                 deps: ['jquery']
+            },
+            'apprise':{
+                deps:['jquery']
             }
         }
     });
 
 </script>
 <link type="text/css" rel="stylesheet" href="/static/lib/bootstrap/css/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="/static/lib/apprise/apprise.min.css"/>
 <link type="text/css" rel="stylesheet" href="/static/css/main.css"/>
 

@@ -1,9 +1,10 @@
 package com.lecoding.models.dao;
 
-import com.lecoding.models.po.Goods;
+import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.Reserve;
+import com.lecoding.models.po.ReserveGoods;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,5 +12,6 @@ import java.util.Map;
  * DateTime: 13-2-3-下午4:31
  */
 public interface IReserveDAO extends IBaseDAO<Reserve> {
-    Map<Goods, Integer> getGoodsList(int orderId);
+    List<ReserveGoods> getGoodsList(int orderId);
+    List<Reserve> allReserves(Customer customer);
 }

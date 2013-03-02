@@ -1,13 +1,16 @@
 package com.lecoding.controllers;
 
+import com.lecoding.components.Utils;
 import com.lecoding.controllers.forms.ChangePassForm;
 import com.lecoding.controllers.forms.CustomerInfoForm;
 import com.lecoding.controllers.forms.CustomerSignUpForm;
+import com.lecoding.controllers.forms.SearchGoodsForm;
 import com.lecoding.models.po.Area;
 import com.lecoding.models.po.Customer;
-import com.lecoding.models.service.IAreaService;
-import com.lecoding.models.service.ICustomerService;
-import com.lecoding.models.service.IPayRecordService;
+import com.lecoding.models.po.Reserve;
+import com.lecoding.models.service.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,15 +25,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,17 +51,57 @@ public class CustomerController {
 
     @Autowired
     IPayRecordService payRecordService;
+    @Autowired
+    IShopService shopService;
+
+    @Autowired
+    IReserveService reserveService;
 
     @Autowired
     @Qualifier("customerAuthentication")
     protected AuthenticationManager customerAuthentication;
 
     @RequestMapping(value = {"/", ""}, headers = "X-Requested-With=XMLHttpRequest")
-    public ModelAndView ajaxIndex() {
-        ModelAndView mv = new ModelAndView("customer/index");
-        mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
-        return mv;
+    public String ajaxIndex(Model model) {
+        model.addAttribute("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+        model.addAttribute("dates", Utils.getNextWeek());
+        model.addAttribute("searchGoodsForm", new SearchGoodsForm());
+        model.addAttribute("shops", shopService.allShops());
+        return "customer/index";
     }
+
+
+    @RequestMapping(value = {"/reserve"}, headers = "X-Requested-With=XMLHttpRequest")
+    @ResponseBody
+    public Map reserve(@RequestParam Map<String, String> map) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            reserveService.addReserve(map, customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+            result.put("code", 0);
+        } catch (Exception ex) {
+            result.put("code", 1);
+            result.put("data", ex.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/reserve/{id}")
+    public String reserveDetail(@PathVariable("id") int id, Model model) {
+        Reserve reserve = reserveService.findById(id);
+        if (reserve == null) return null;
+        Logger.getLogger(this.getClass()).log(Level.ERROR, reserve.getCustomer().getName());
+        if (!reserve.getCustomer().getName().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
+            return null;
+        model.addAttribute("list", reserve.getReserveGoods());
+        return "customer/record_detail";
+    }
+
+    @RequestMapping(value = {"/record"}, headers = "X-Requested-With=XMLHttpRequest")
+    public String ajaxRecord(Model model) {
+        model.addAttribute("reserves", reserveService.allReserves(customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName())));
+        return "customer/record";
+    }
+
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String pay(Model model) {
@@ -110,7 +152,7 @@ public class CustomerController {
                 Customer customer = customerService.findByName(username);
                 PasswordEncoder encoder = new Md5PasswordEncoder();
                 customer.setPassword(encoder.encodePassword(passForm.getPassword(), customer.getName()));
-                if (customerService.add(customer)) {
+                if (customerService.update(customer)) {
                     model.addAttribute("success", true);
                 } else {
                     bindingResult.addError(new ObjectError("customer", "修改密码失败"));
@@ -147,7 +189,7 @@ public class CustomerController {
                 user.setArea(area);
                 user.setAge(infoForm.getAge());
                 user.setGender(infoForm.getGender());
-                if (!customerService.add(user)) {
+                if (!customerService.update(user)) {
                     bindingResult.addError(new ObjectError("customer", "修改用户失败"));
                 } else {
                     model.addAttribute("success", true);
@@ -159,7 +201,7 @@ public class CustomerController {
     }
 
 
-    @RequestMapping({"/", "", "/account", "/pay", "/password"})
+    @RequestMapping({"/", "", "/account", "/pay", "/password", "/record"})
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView("customer/main");
         mv.addObject("user", customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));

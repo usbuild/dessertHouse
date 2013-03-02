@@ -1,15 +1,13 @@
 package com.lecoding.models.dao.impl;
 
 import com.lecoding.models.dao.IReserveDAO;
-import com.lecoding.models.po.Goods;
-import com.lecoding.models.po.GoodsType;
+import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.Reserve;
+import com.lecoding.models.po.ReserveGoods;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,29 +16,18 @@ import java.util.Map;
  */
 @Repository
 public class ReserveDAOImpl extends BaseDAOSupport<Reserve> implements IReserveDAO {
-    @Override
-    public Map<Goods, Integer> getGoodsList(int orderId) {
-        String hql = "select rg.amount,g.id,g.sid,g.name,g.amount,g.price,g.goodsType " +
-                "from Reserve as r " +
-                "left join r.shop as s " +
-                "left join r.reserveGoods as rg  " +
-                "left join rg.goods g " +
-                "where r.id=:orderId";
-        Query query = getSession().createQuery(hql).setParameter("orderId", orderId);
-        Iterator itr = query.list().iterator();
-        Map<Goods, Integer> map = new HashMap<Goods, Integer>();
-        while (itr.hasNext()) {
-            Object[] objects = (Object[]) itr.next();
-            Goods goods = new Goods();
-            goods.setId((Integer) objects[1]);
-            goods.setSid((String) objects[2]);
-            goods.setName((String) objects[3]);
-            goods.setAmount((Integer) objects[4]);
-            goods.setPrice((Double) objects[5]);
-            goods.setGoodsType((GoodsType) objects[6]);
-            map.put(goods, (Integer) objects[0]);
-        }
-        return map;
 
+    @Override
+    public List<ReserveGoods> getGoodsList(int orderId) {
+        Reserve reserve = this.findById(orderId);
+        if (reserve == null) return null;
+        return reserve.getReserveGoods();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Reserve> allReserves(Customer customer) {
+        Query query = getSession().createQuery("SELECT r FROM Reserve AS r LEFT JOIN r.customer AS c WHERE c.id = :id").setInteger("id", customer.getId());
+        return query.list();
     }
 }

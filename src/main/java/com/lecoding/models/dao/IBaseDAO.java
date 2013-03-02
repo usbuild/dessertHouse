@@ -12,6 +12,8 @@ import java.util.List;
 public interface IBaseDAO<T> {
     void save(T t);
 
+    void update(T t);
+
     T findById(int i);
 
     List<T> findByCriteria(Criterion... criterions);

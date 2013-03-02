@@ -3,6 +3,7 @@ package com.lecoding.models.po;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class Reserve implements Serializable {
 
     @javax.persistence.Column(name = "id", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -39,7 +41,7 @@ public class Reserve implements Serializable {
 
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     public Customer getCustomer() {
         return customer;
@@ -49,16 +51,16 @@ public class Reserve implements Serializable {
         this.customer = customer;
     }
 
-    private Shop shop;
+    @Column(name = "total")
+    @Basic
+    private double total;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "shop_id")
-    public Shop getShop() {
-        return shop;
+    public double getTotal() {
+        return total;
     }
 
-    public void setShop(Shop shop) {
-        this.shop = shop;
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     @Override
@@ -83,12 +85,18 @@ public class Reserve implements Serializable {
 
     private List<ReserveGoods> reserveGoods;
 
-    @OneToMany(mappedBy = "reserve")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserve", fetch = FetchType.EAGER)
     public List<ReserveGoods> getReserveGoods() {
         return reserveGoods;
     }
 
     public void setReserveGoods(List<ReserveGoods> reserveGoods) {
         this.reserveGoods = reserveGoods;
+    }
+
+    public void addReserveGoods(ReserveGoods reserveGoods) {
+        if (this.reserveGoods == null) this.reserveGoods = new ArrayList<ReserveGoods>();
+        reserveGoods.setReserve(this);
+        this.reserveGoods.add(reserveGoods);
     }
 }

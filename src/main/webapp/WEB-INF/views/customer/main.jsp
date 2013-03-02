@@ -14,7 +14,18 @@
     <jsp:include page="../libs.jsp"/>
 
     <script type="text/javascript">
-        require(['bootstrap', 'backbone', 'jquery.form'], function () {
+        require(['bootstrap', 'backbone', 'apprise'], function () {
+
+            var routerFunc = function (url) {
+                return function () {
+                    $.get("/customer/" + url, {}, function (data) {
+                        $(".customer-container").slideUp(function () {
+                            $(this).html(data).slideDown();
+                        });
+                    });
+                };
+            };
+
             $(function () {
                 var Router = Backbone.Router.extend({
                     routes: {
@@ -22,38 +33,15 @@
                         "customer/": "index",
                         "customer": "index",
                         "customer/pay": "pay",
-                        "customer/password": "password"
+                        "customer/password": "password",
+                        "customer/record": "record"
                     },
 
-                    account: function () {
-                        $.get("/customer/account", {}, function (data) {
-                            $(".customer-container").slideUp(function () {
-                                $(this).html(data).slideDown();
-                            });
-                        });
-                    },
-
-                    index: function () {
-                        $.get("/customer", {}, function (data) {
-                            $(".customer-container").slideUp(function () {
-                                $(this).html(data).slideDown();
-                            });
-                        });
-                    },
-                    pay: function () {
-                        $.get("/customer/pay", {}, function (data) {
-                            $(".customer-container").slideUp(function () {
-                                $(this).html(data).slideDown();
-                            });
-                        });
-                    },
-                    password: function () {
-                        $.get("/customer/password", {}, function (data) {
-                            $(".customer-container").slideUp(function () {
-                                $(this).html(data).slideDown();
-                            });
-                        });
-                    }
+                    account: routerFunc("account"),
+                    index: routerFunc(""),
+                    pay: routerFunc("pay"),
+                    password: routerFunc("password"),
+                    record: routerFunc("record")
                 });
 
                 var router = new Router;
@@ -65,9 +53,15 @@
                     $('.customer-profile-container').hide();
                 });
 
-                $('.router-link').click(function (evt) {
+                $(document).on('click', '.router-link', function (evt) {
                     evt.preventDefault();
                     router.navigate($(this).attr("href"), true);
+                });
+                $(document).on("click", '.order-detail-btn', function (evt) {
+                    evt.preventDefault();
+                    $.get("/customer/reserve/" + $(this).attr("data-id"), {}, function (e) {
+                        apprise(e);
+                    });
                 });
 
                 /*
@@ -107,10 +101,11 @@
                     evt.preventDefault();
                     searchModel.fetch({data: {
                         key: $("#search-input").val(),
+                        date: $("#form-search-date").val(),
+                        shopId: $("#form-shop-id").val(),
                         page: 0
                     }});
                 });
-
 
                 $(document).on("submit", "form.ajax-form", function (evt) {
                     evt.preventDefault();
@@ -121,6 +116,51 @@
                     });
                 });
 
+                var orderModel = {};
+
+                $(document).on("click", ".order-btn", function (evt) {
+                    evt.preventDefault();
+                    var store = searchModel.get('data')[$(this).attr("data-id")];
+                    if (orderModel[store.id] != undefined) {
+                        apprise("已订购此商品");
+                        return false;
+                    }
+                    apprise('请输入订购数目', {'input': true, 'textOk': '确认', 'textCancel': '取消'}, function (num) {
+                        if (!/\d+/.test(num) || num > store['amount']) {
+                            apprise("数量输入非法");
+                            return false;
+                        } else {
+                            store['amount'] = num;
+                            $("#order-result-table").append(_.template($("#order-template").html(), {item: store}));
+                            orderModel[store.id] = store;
+                        }
+                    });
+                });
+
+                $(document).on("click", ".order-cancel", function (evt) {
+                    delete orderModel[$(this).attr('data-id')];
+                    $(this).parents("tr").remove();
+                });
+
+                $(document).on("click", ".order-submit", function (evt) {
+                    var d = [];
+                    var m = {};
+                    for (var a in orderModel) {
+                        d.push(a);
+                        m[a] = orderModel[a].amount;
+                    }
+                    if (d.length > 0) {
+                        $.post("/customer/reserve", m, function (e) {
+                            if (e.code == 0) {
+                                apprise("订购成功");
+                                updateProfile();
+                                window.location.href = "/customer/record";
+                            } else {
+                                apprise(e.data);
+                            }
+                        }, 'json');
+                    }
+                });
 
             });
         });
@@ -137,14 +177,25 @@
         </tr>
         <@ _.each(model.get('data'), function(item, key, list) { @>
         <tr>
-            <td><@= item.sid @></td>
-            <td><@= item.name @></td>
+            <td><@= item.goods.sid @></td>
+            <td><@= item.goods.name @></td>
             <td><@= item.price @></td>
             <td><@= item.amount @></td>
-            <td><@= item.goodsType.name @></td>
-            <td><a class="btn" href="#"><i class="icon-ok"></i></a></td>
+            <td><@= item.goods.goodsType.name @></td>
+            <td><a class="btn order-btn" href="#" data-id='<@= key@>'><i class="icon-ok"></i></a></td>
         </tr>
         <@ }); @>
+    </script>
+
+    <script type="text/html" id="order-template">
+        <tr>
+            <td><@= item.goods.sid @></td>
+            <td><@= item.goods.name @></td>
+            <td><@= item.price @></td>
+            <td><@= item.goods.goodsType.name@></td>
+            <td><@= item.amount @></td>
+            <td><a class="btn order-cancel" href="#" data-id="<@= item.id @>"><i class="icon-remove"></i></a></td>
+        </tr>
     </script>
 </head>
 <body class="customer-body">

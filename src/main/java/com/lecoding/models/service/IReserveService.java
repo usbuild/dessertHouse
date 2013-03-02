@@ -1,8 +1,9 @@
 package com.lecoding.models.service;
 
-import com.lecoding.models.po.Goods;
+import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.Reserve;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,5 +14,7 @@ import java.util.Map;
 public interface IReserveService {
     Reserve findById(int id);
 
-    Map<Goods, Integer> getGoodsList(int orderId);
+    void addReserve(Map<String, String> map, Customer customer) throws Exception;
+
+    List<Reserve> allReserves(Customer customer);
 }

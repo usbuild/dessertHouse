@@ -37,6 +37,17 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
+    public boolean update(Customer customer) {
+        try {
+            customerDAO.update(customer);
+            return true;
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass()).log(Level.ERROR, ex.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public Customer findById(int id) {
         return customerDAO.findById(id);
     }

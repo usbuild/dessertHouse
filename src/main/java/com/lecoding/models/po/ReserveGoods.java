@@ -35,29 +35,6 @@ public class ReserveGoods implements Serializable {
         this.amount = amount;
     }
 
-//    private int orderId;
-
-//    @Column
-//    @Basic
-//    public int getOrderId() {
-//        return orderId;
-//    }
-//
-//    public void setOrderId(int orderId) {
-//        this.orderId = orderId;
-//    }
-//
-//    private int goodsId;
-//
-//    @Column
-//    @Basic
-//    public int getGoodsId() {
-//        return goodsId;
-//    }
-//
-//    public void setGoodsId(int goodsId) {
-//        this.goodsId = goodsId;
-//    }
 
     @Override
     public boolean equals(Object o) {
@@ -79,22 +56,23 @@ public class ReserveGoods implements Serializable {
         return result;
     }
 
-    private Goods goods;
 
-    @OneToOne
-    @JoinColumn(name = "goods_id")
-    public Goods getGoods() {
-        return goods;
+    private Store store;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    public Store getStore() {
+        return store;
     }
 
-    public void setGoods(Goods goods) {
-        this.goods = goods;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     private Reserve reserve;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "reserve_id", referencedColumnName = "id")
     public Reserve getReserve() {
         return reserve;
     }

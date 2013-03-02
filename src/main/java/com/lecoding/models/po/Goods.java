@@ -46,29 +46,6 @@ public class Goods implements Serializable {
         this.name = name;
     }
 
-    private double price;
-
-    @javax.persistence.Column(name = "price", nullable = false, insertable = true, updatable = true, length = 5, precision = 0)
-    @Basic
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    private int amount;
-
-    @javax.persistence.Column(name = "amount", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
-    @Basic
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 
     private GoodsType goodsType;
 
@@ -89,9 +66,7 @@ public class Goods implements Serializable {
 
         Goods goods = (Goods) o;
 
-        if (amount != goods.amount) return false;
         if (id != goods.id) return false;
-        if (Double.compare(goods.price, price) != 0) return false;
         if (name != null ? !name.equals(goods.name) : goods.name != null) return false;
         if (sid != null ? !sid.equals(goods.sid) : goods.sid != null) return false;
 
@@ -101,13 +76,9 @@ public class Goods implements Serializable {
     @Override
     public int hashCode() {
         int result;
-        long temp;
         result = id;
         result = 31 * result + (sid != null ? sid.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + amount;
         return result;
     }
 }

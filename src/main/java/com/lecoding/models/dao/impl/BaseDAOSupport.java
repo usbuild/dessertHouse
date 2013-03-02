@@ -34,7 +34,11 @@ public abstract class BaseDAOSupport<T extends Serializable> implements IBaseDAO
     }
 
     public void save(T t) {
-        getSession().saveOrUpdate(t);
+        getSession().save(t);
+    }
+
+    public void update(T t) {
+        getSession().update(t);
     }
 
     @SuppressWarnings("unchecked")
