@@ -10,10 +10,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -61,6 +58,15 @@ public class GoodsController {
         Map<String, Object> map = new HashMap<String, Object>();
         key = new String(key.getBytes("ISO-8859-1"), "UTF-8");
         map.put("data", storeService.searchStore(user.getShop().getId(), key, new Date()));
+        return map;
+    }
+
+    @RequestMapping({"/user/employee/store/list", "/user/employee/store/list/"})
+    @ResponseBody
+    public Map userSearchGoods(@RequestParam("date") Date date) throws UnsupportedEncodingException {
+        User user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("data", storeService.searchStore(user.getShop().getId(), "", date));
         return map;
     }
 }

@@ -1,11 +1,13 @@
 package com.lecoding.controllers;
 
+import com.lecoding.components.Utils;
 import com.lecoding.controllers.forms.BuyForm;
 import com.lecoding.controllers.forms.SimpleResponse;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.User;
 import com.lecoding.models.service.ICustomerService;
 import com.lecoding.models.service.ISaleService;
+import com.lecoding.models.service.IStoreService;
 import com.lecoding.models.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,9 @@ public class EmployeeController {
     ICustomerService customerService;
     @Autowired
     ISaleService saleService;
+
+    @Autowired
+    IStoreService storeService;
 
     private User getLoggedUser() {
         return userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -62,6 +67,10 @@ public class EmployeeController {
 
     @RequestMapping(value = {"/store"}, headers = "X-Requested-With=XMLHttpRequest")
     public String updateStore(Model model) {
+        User user = getLoggedUser();
+        model.addAttribute("dates", Utils.getNextWeek());
+        model.addAttribute("goods", storeService.searchStore(user.getShop().getId(), "", Utils.getNextWeek().get(0)));
+
         return "employee/store";
     }
 

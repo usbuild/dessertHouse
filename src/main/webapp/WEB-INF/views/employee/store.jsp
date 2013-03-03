@@ -6,30 +6,18 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<form class="form-search">--%>
-    <%--<label for="form-shop-id">分店</label>--%>
-    <%--<select name="shop_id" id="form-shop-id">--%>
-        <%--<c:forEach items="${shops}" var="shop">--%>
-            <%--<option value="${shop.id}">${shop.name}</option>--%>
-        <%--</c:forEach>--%>
-    <%--</select>--%>
-    <%--<label for="form-search-date">日期</label>--%>
-    <%--<select name="date" id="form-search-date">--%>
-        <%--<c:forEach items="${dates}" var="date">--%>
-            <%--<option value="<fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/>">--%>
-            <%--<fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></option>--%>
-        <%--</c:forEach>--%>
-    <%--</select>--%>
-    <%--<label>--%>
-        <%--商品名称：--%>
-        <%--<input type="text" class="input-large search-query" id="search-input">--%>
-    <%--</label>--%>
-    <%--<button class="btn" id="search-btn">搜索</button>--%>
-<%--</form>--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<select name="date" id="form-search-date">
+    <c:forEach items="${dates}" var="date">
+        <option value="<fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/>">
+            <fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></option>
+    </c:forEach>
+</select>
 
 
-搜索列表：
-<table class="table" id="search-result-table">
+<table class="table" id="store-table">
     <tr>
         <th>编号</th>
         <th>名称</th>
@@ -38,16 +26,14 @@
         <th>类型</th>
         <th>操作</th>
     </tr>
+    <c:forEach var="item" items="${goods}" varStatus="status">
+        <tr>
+            <td>${item.goods.sid}</td>
+            <td>${item.goods.name}</td>
+            <td>${item.price}</td>
+            <td>${item.amount}</td>
+            <td>${item.goods.goodsType.name}</td>
+            <td><a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-ok"></i></a></td>
+        </tr>
+    </c:forEach>
 </table>
-预定列表(<a href="/customer/record" class="router-link">订购记录</a> )：
-<table class="table" id="order-result-table">
-    <tr>
-        <th>编号</th>
-        <th>名称</th>
-        <th>价格</th>
-        <th>类型</th>
-        <th>订购数</th>
-        <th>操作</th>
-    </tr>
-</table>
-<button class="btn btn-primary order-submit">提交</button>

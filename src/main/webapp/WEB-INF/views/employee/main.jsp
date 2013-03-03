@@ -8,193 +8,212 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>店员后台</title>
-    <jsp:include page="../libs.jsp"/>
-    <script type="text/javascript">
-        require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], function () {
-            var baseUrl = "/user/employee";
+<title>店员后台</title>
+<jsp:include page="../libs.jsp"/>
+<script type="text/javascript">
+    require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], function () {
+        var baseUrl = "/user/employee";
 
-            var adjMainContainer = function (callback) {
-                var mainContainer = $(".main-container");
-                var employeeContainer = $(".employee-container");
-                mainContainer.css("max-height", employeeContainer.height() + 'px');
-                callback(employeeContainer);
-                mainContainer.css("max-height", "");
-                mainContainer.css("height", employeeContainer.height() + 'px');
-            };
+        var adjMainContainer = function (callback) {
+            var mainContainer = $(".main-container");
+            var employeeContainer = $(".employee-container");
+            mainContainer.css("max-height", employeeContainer.height() + 'px');
+            callback(employeeContainer);
+            mainContainer.css("max-height", "");
+            mainContainer.css("height", employeeContainer.height() + 'px');
+        };
 
-            var routerFunc = function (url) {
-                return function () {
-                    $.get(baseUrl + url, {}, function (e) {
-                        $("li.active").removeClass("active");
-                        $("ul.main-nav a[href $= '" + baseUrl + url + "']").parents("li").addClass("active");
-                        $(".employee-container").hide("slide", {direction: "left"}, 300, function () {
-                            adjMainContainer(function (ec) {
-                                ec.html(e);
-                                ec.show("slide", {direction: "right"}, 300);
-                            });
+        var routerFunc = function (url) {
+            return function () {
+                $.get(baseUrl + url, {}, function (e) {
+                    $("li.active").removeClass("active");
+                    $("ul.main-nav a[href $= '" + baseUrl + url + "']").parents("li").addClass("active");
+                    $(".employee-container").hide("drop", {direction: "left"}, 300, function () {
+                        adjMainContainer(function (ec) {
+                            ec.html(e);
+                            ec.fadeIn(200);
                         });
                     });
-                };
+                });
             };
-            var Router = Backbone.Router.extend({
-                routes: {
-                    "user/employee": "index",
-                    "user/employee/": "index",
-                    "user/employee/store": "store",
-                    "user/employee/info": "info"
-                },
-                index: routerFunc("/"),
-                store: routerFunc("/store"),
-                info: routerFunc("/info")
-            });
-
-            var router = new Router;
-            Backbone.history.start({pushState: true});
-            $(document).on('click', '.router-link', function (evt) {
-                evt.preventDefault();
-                router.navigate($(this).attr("href"), true);
-            });
-
-            var SearchModel = Backbone.Model.extend({
-                url: "/user/employee/search"
-            });
-
-
-            var SearchView = Backbone.View.extend({
-                initialize: function () {
-                    this.model.on("change", this.render, this);
-                },
-                render: function () {
-                    var model = this.model;
-                    adjMainContainer(function () {
-                        $("#search-store-table").html(_.template($('#search-store-template').html(), {'model': model}));
-                    });
-                }
-            });
-
-            var searchModel = new SearchModel;
-            new SearchView({model: searchModel});
-
-            $(document).on("submit", ".form-store-search", function (evt) {
-                evt.preventDefault();
-                searchModel.fetch({data: {
-                    key: $("#search-store-input").val()
-                }
-                });
-            });
-
-            var orderModel = {};
-
-            var updateTotalAmount = function () {
-                var total = 0;
-                for (var i in orderModel) {
-                    total += orderModel[i].price * orderModel[i].amount;
-                }
-                $("#total-amount").val(total);
-            };
-
-            $(document).on("click", ".buy-btn", function (evt) {
-                evt.preventDefault();
-                var store = searchModel.get('data')[$(this).attr("data-id")];
-                if (orderModel[store.id] != undefined) {
-                    apprise("已订购此商品");
-                    return;
-                }
-                apprise('请输入订购数目', {'input': true, 'textOk': '确认', 'textCancel': '取消'}, function (num) {
-                    if (!/\d+/.test(num) || num > store['amount'] || num <= 0) {
-                        apprise("数量输入非法");
-                    } else {
-                        store['amount'] = num;
-                        adjMainContainer(function () {
-                            $("#buy-store-table").append(_.template($("#buy-template").html(), {item: store}))
-                        });
-                        orderModel[store.id] = store;
-                        updateTotalAmount();
-                    }
-                });
-            });
-
-
-            $(document).on("click", ".buy-cancel", function () {
-                delete orderModel[$(this).attr('data-id')];
-                var tr = $(this);
-                updateTotalAmount();
-                adjMainContainer(function () {
-                    tr.parents("tr").remove();
-                });
-            });
-            var customer = null;
-            $(document).on("keydown", "#customer-info", function (evt) {
-                if (evt.keyCode == 13) {
-                    $.get("/user/employee/customer/" + $(this).val(), function (e) {
-                        var content;
-                        adjMainContainer(function () {
-                            if (e.code == 0) {
-                                customer = e.data;
-                                $("#customer-info-div").removeClass("alert alert-success alert-danger").addClass("alert alert-success").html("余额:" + customer.amount);
-                            } else {
-                                $("#customer-info-div").removeClass("alert alert-success alert-danger").addClass("alert alert-danger").html("查无此人");
-                                customer = null;
-                            }
-                        })
-                    }, 'json');
-                }
-            });
-            $(document).on("click", ".buy-submit", function () {
-                var d = [];
-                var m = {};
-                for (var a in orderModel) {
-                    d.push(a);
-                    m[a] = orderModel[a].amount;
-                }
-                if (d.length > 0) {
-                    $.post("/user/employee/bought", {goods: m, customer: $("#customer-info").val(), pay: $("#cash-amount").val()}, function (e) {
-
-                        if (e.code == 0) {
-                            apprise("订购成功", {}, function () {
-                                routerFunc("/")();
-                            });
-                        } else {
-                            apprise(e.data);
-                        }
-
-                    }, 'json');
-                }
-            });
-
+        };
+        var Router = Backbone.Router.extend({
+            routes: {
+                "user/employee": "index",
+                "user/employee/": "index",
+                "user/employee/store": "store",
+                "user/employee/info": "info"
+            },
+            index: routerFunc("/"),
+            store: routerFunc("/store"),
+            info: routerFunc("/info")
         });
-    </script>
-    <script type="text/html" id="search-store-template">
-        <tr>
-            <th>编号</th>
-            <th>名称</th>
-            <th>价格</th>
-            <th>数量</th>
-            <th>类型</th>
-            <th>操作</th>
-        </tr>
-        <@ _.each(model.get('data'), function(item, key, list) { @>
-        <tr>
-            <td><@= item.goods.sid @></td>
-            <td><@= item.goods.name @></td>
-            <td><@= item.price @></td>
-            <td><@= item.amount @></td>
-            <td><@= item.goods.goodsType.name @></td>
-            <td><a class="btn buy-btn" href="#" data-id='<@= key@>'><i class="icon-ok"></i></a></td>
-        </tr>
-        <@ }); @>
-    </script>
-    <script type="text/html" id="buy-template">
-        <tr>
-            <td><@= item.goods.sid @></td>
-            <td><@= item.goods.name @></td>
-            <td><@= item.price @></td>
-            <td><@= item.goods.goodsType.name@></td>
-            <td><@= item.amount @></td>
-            <td><a class="btn buy-cancel" href="#" data-id="<@= item.id @>"><i class="icon-remove"></i></a></td>
-        </tr>
-    </script>
+
+        var router = new Router;
+        Backbone.history.start({pushState: true});
+        $(document).on('click', '.router-link', function (evt) {
+            evt.preventDefault();
+            router.navigate($(this).attr("href"), true);
+        });
+
+        var SearchModel = Backbone.Model.extend({
+            url: "/user/employee/search"
+        });
+
+
+        var SearchView = Backbone.View.extend({
+            initialize: function () {
+                this.model.on("change", this.render, this);
+            },
+            render: function () {
+                var model = this.model;
+                var $container = $(this.$el.selector);
+                adjMainContainer(function () {
+                    $container.html(_.template($('#search-store-template').html(), {'model': model}));
+                });
+            }
+        });
+
+
+        var searchModel = new SearchModel;
+        new SearchView({model: searchModel, el: "#search-store-table"});
+
+        var StoreModel = Backbone.Model.extend({
+            url: "/user/employee/store/list/"
+        });
+
+        var storeModel = new StoreModel;
+        new SearchView({model: storeModel, el: "#store-table"});
+        $(document).on("change", "#form-search-date", function () {
+            storeModel.fetch({
+                data: {
+                    date: $("#form-search-date").val()
+                }
+            });
+        });
+
+
+        $(document).on("submit", ".form-store-search", function (evt) {
+            evt.preventDefault();
+            searchModel.fetch({data: {
+                key: $("#search-store-input").val()
+            }
+            });
+        });
+
+        //handle store management
+
+        var orderModel = {};
+
+        var updateTotalAmount = function () {
+            var total = 0;
+            for (var i in orderModel) {
+                total += orderModel[i].price * orderModel[i].amount;
+            }
+            $("#total-amount").val(total);
+        };
+
+        $(document).on("click", ".buy-btn", function (evt) {
+            evt.preventDefault();
+            var store = searchModel.get('data')[$(this).attr("data-id")];
+            if (orderModel[store.id] != undefined) {
+                apprise("已订购此商品");
+                return;
+            }
+            apprise('请输入订购数目', {'input': true, 'textOk': '确认', 'textCancel': '取消'}, function (num) {
+                if (!/\d+/.test(num) || num > store['amount'] || num <= 0) {
+                    apprise("数量输入非法");
+                } else {
+                    store['amount'] = num;
+                    adjMainContainer(function () {
+                        $("#buy-store-table").append(_.template($("#buy-template").html(), {item: store}))
+                    });
+                    orderModel[store.id] = store;
+                    updateTotalAmount();
+                }
+            });
+        });
+
+
+        $(document).on("click", ".buy-cancel", function () {
+            delete orderModel[$(this).attr('data-id')];
+            var tr = $(this);
+            updateTotalAmount();
+            adjMainContainer(function () {
+                tr.parents("tr").remove();
+            });
+        });
+        var customer = null;
+        $(document).on("keydown", "#customer-info", function (evt) {
+            if (evt.keyCode == 13) {
+                $.get("/user/employee/customer/" + $(this).val(), function (e) {
+                    var content;
+                    adjMainContainer(function () {
+                        if (e.code == 0) {
+                            customer = e.data;
+                            $("#customer-info-div").removeClass("alert alert-success alert-danger").addClass("alert alert-success").html("余额:" + customer.amount);
+                        } else {
+                            $("#customer-info-div").removeClass("alert alert-success alert-danger").addClass("alert alert-danger").html("查无此人");
+                            customer = null;
+                        }
+                    })
+                }, 'json');
+            }
+        });
+        $(document).on("click", ".buy-submit", function () {
+            var d = [];
+            var m = {};
+            for (var a in orderModel) {
+                d.push(a);
+                m[a] = orderModel[a].amount;
+            }
+            if (d.length > 0) {
+                $.post("/user/employee/bought", {goods: m, customer: $("#customer-info").val(), pay: $("#cash-amount").val()}, function (e) {
+
+                    if (e.code == 0) {
+                        apprise("订购成功", {}, function () {
+                            routerFunc("/")();
+                        });
+                    } else {
+                        apprise(e.data);
+                    }
+
+                }, 'json');
+            }
+        });
+
+    });
+</script>
+<script type="text/html" id="search-store-template">
+    <tr>
+        <th>编号</th>
+        <th>名称</th>
+        <th>价格</th>
+        <th>数量</th>
+        <th>类型</th>
+        <th>操作</th>
+    </tr>
+    <@ _.each(model.get('data'), function(item, key, list) { @>
+    <tr>
+        <td><@= item.goods.sid @></td>
+        <td><@= item.goods.name @></td>
+        <td><@= item.price @></td>
+        <td><@= item.amount @></td>
+        <td><@= item.goods.goodsType.name @></td>
+        <td><a class="btn buy-btn" href="#" data-id='<@= key@>'><i class="icon-ok"></i></a></td>
+    </tr>
+    <@ }); @>
+</script>
+<script type="text/html" id="buy-template">
+    <tr>
+        <td><@= item.goods.sid @></td>
+        <td><@= item.goods.name @></td>
+        <td><@= item.price @></td>
+        <td><@= item.goods.goodsType.name@></td>
+        <td><@= item.amount @></td>
+        <td><a class="btn buy-cancel" href="#" data-id="<@= item.id @>"><i class="icon-remove"></i></a></td>
+    </tr>
+</script>
 </head>
 <body class="user-body">
 <div class="navbar navbar-static-top">
