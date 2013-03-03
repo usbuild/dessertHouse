@@ -76,14 +76,6 @@
                 }, 'json');
             });
 
-            /*
-             Underscore setting
-             */
-            _.templateSettings = {
-                interpolate: /\<\@\=(.+?)\@\>/gim,
-                evaluate: /\<\@([\s\S]+?)\@\>/gim,
-                escape: /\<\@\-(.+?)\@\>/gim
-            };
 
             var SearchModel = Backbone.Model.extend({
                 url: '/customer/search/'
@@ -138,7 +130,7 @@
                     return false;
                 }
                 apprise('请输入订购数目', {'input': true, 'textOk': '确认', 'textCancel': '取消'}, function (num) {
-                    if (!/\d+/.test(num) || num > store['amount']) {
+                    if (!/\d+/.test(num) || num > store['amount'] || num <= 0) {
                         apprise("数量输入非法");
                         return false;
                     } else {

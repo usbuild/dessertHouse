@@ -45,6 +45,17 @@
         }
     });
 
+    require(['backbone'], function () {
+        /*
+         Underscore setting
+         */
+        _.templateSettings = {
+            interpolate: /\<\@\=(.+?)\@\>/gim,
+            evaluate: /\<\@([\s\S]+?)\@\>/gim,
+            escape: /\<\@\-(.+?)\@\>/gim
+        };
+    })
+
 </script>
 <link type="text/css" rel="stylesheet" href="/static/lib/bootstrap/css/bootstrap.min.css"/>
 <link type="text/css" rel="stylesheet" href="/static/lib/apprise/apprise.min.css"/>

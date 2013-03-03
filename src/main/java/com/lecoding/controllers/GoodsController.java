@@ -1,10 +1,13 @@
 package com.lecoding.controllers;
 
 import com.lecoding.controllers.forms.SearchGoodsForm;
+import com.lecoding.models.po.User;
 import com.lecoding.models.service.IGoodsService;
 import com.lecoding.models.service.IStoreService;
+import com.lecoding.models.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -25,7 +28,7 @@ import java.util.Map;
  * DateTime: 13-2-27 下午9:24
  */
 @Controller
-@RequestMapping({"/customer", "/employee"})
+@RequestMapping("")
 public class GoodsController {
     @InitBinder
     private void dateBinder(WebDataBinder binder) {
@@ -39,12 +42,25 @@ public class GoodsController {
     @Autowired
     IStoreService storeService;
 
-    @RequestMapping({"/search/", "/search"})
+    @Autowired
+    IUserService userService;
+
+    @RequestMapping({"/customer/search/", "/customer/search"})
     @ResponseBody
     public Map searchGoods(@Valid SearchGoodsForm goodsForm, @RequestParam int page) throws UnsupportedEncodingException {
         goodsForm.setKey(new String(goodsForm.getKey().getBytes("ISO-8859-1"), "UTF-8"));
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("data", storeService.searchStore(goodsForm.getShopId(), goodsForm.getKey(), goodsForm.getDate()));
+        return map;
+    }
+
+    @RequestMapping({"/user/employee/search", "/user/employee/search/"})
+    @ResponseBody
+    public Map userSearchGoods(@RequestParam("key") String key) throws UnsupportedEncodingException {
+        User user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        Map<String, Object> map = new HashMap<String, Object>();
+        key = new String(key.getBytes("ISO-8859-1"), "UTF-8");
+        map.put("data", storeService.searchStore(user.getShop().getId(), key, new Date()));
         return map;
     }
 }

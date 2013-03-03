@@ -1,5 +1,6 @@
 package com.lecoding.models.service;
 
+import com.lecoding.controllers.forms.BuyForm;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.Sale;
 
@@ -16,6 +17,9 @@ public interface ISaleService {
 
     void addReserve(Map<String, String> map, Customer customer) throws Exception;
 
+    void addSale(BuyForm buyForm) throws Exception;
+
     List<Sale> allReserves(Customer customer);
+
     List<Sale> allSales(Customer customer);
 }

@@ -9,6 +9,8 @@ import com.lecoding.models.po.Customer;
  */
 
 public interface ICustomerService {
+    Customer getAnonymousCustomer();
+
     boolean add(Customer customer);
 
     boolean update(Customer customer);

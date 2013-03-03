@@ -6,11 +6,8 @@ import com.lecoding.models.service.ICustomerService;
 import com.lecoding.models.service.IPayRecordService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +21,11 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Autowired
     IPayRecordService payRecordService;
+
+    @Override
+    public Customer getAnonymousCustomer() {
+        return customerDAO.findByName("anonymous");
+    }
 
     @Override
     public boolean add(Customer customer) {
@@ -65,9 +67,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer findByName(String name) {
-        List<Customer> list = customerDAO.findByCriteria(Restrictions.eq("name", name));
-        if (list.isEmpty()) return null;
-        else return list.get(0);
+        return customerDAO.findByName(name);
     }
 
     @Override

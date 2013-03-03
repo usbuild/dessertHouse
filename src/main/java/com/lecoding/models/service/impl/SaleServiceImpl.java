@@ -1,12 +1,13 @@
 package com.lecoding.models.service.impl;
 
-import com.lecoding.models.dao.ICustomerDAO;
+import com.lecoding.controllers.forms.BuyForm;
 import com.lecoding.models.dao.ISaleDAO;
 import com.lecoding.models.dao.IStoreDAO;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.Sale;
 import com.lecoding.models.po.SaleGoods;
 import com.lecoding.models.po.Store;
+import com.lecoding.models.service.ICustomerService;
 import com.lecoding.models.service.ISaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,16 @@ import java.util.Map;
 public class SaleServiceImpl implements ISaleService {
 
     @Autowired
-    ICustomerDAO customerDAO;
+    ICustomerService customerService;
 
     @Autowired
-    ISaleDAO orderDAO;
+    ISaleDAO saleDAO;
     @Autowired
     IStoreDAO storeDAO;
 
     @Override
     public Sale findById(int id) {
-        return orderDAO.findById(id);
+        return saleDAO.findById(id);
     }
 
     @Override
@@ -59,19 +60,54 @@ public class SaleServiceImpl implements ISaleService {
             storeDAO.update(store);
         }
         customer.setAmount(customer.getAmount() - (int) total);
-        customerDAO.update(customer);
+        customerService.update(customer);
         sale.setTotal(total);
-        orderDAO.save(sale);
+        saleDAO.save(sale);
+    }
+
+    @Override
+    public void addSale(BuyForm buyForm) throws Exception {
+        Customer customer = customerService.findByName(buyForm.getCustomer());
+        if (customer == null) {
+            customer = customerService.getAnonymousCustomer();
+        }
+
+        Sale sale = new Sale();
+        sale.setCustomer(customer);
+        sale.setReserve(0);
+
+        double total = 0 - buyForm.getPay();
+
+        for (String key : buyForm.getGoods().keySet()) {
+            Store store = storeDAO.findById(Integer.parseInt(key));
+            int num = Integer.parseInt(buyForm.getGoods().get(key));
+
+            if (store.getAmount() < num) throw new Exception("库存不足");
+            store.setAmount(store.getAmount() - num);
+            SaleGoods saleGoods = new SaleGoods();
+            saleGoods.setAmount(num);
+            saleGoods.setStore(store);
+            saleGoods.setSale(sale);
+
+            sale.addSaleGoods(saleGoods);
+            total += num * store.getPrice();
+            if (total > customer.getAmount()) throw new Exception("余额不足");
+            storeDAO.update(store);
+        }
+        customer.setAmount(customer.getAmount() - (int) total);
+        customerService.update(customer);
+        sale.setTotal(total + buyForm.getPay());
+        saleDAO.save(sale);
     }
 
     @Override
     public List<Sale> allReserves(Customer customer) {
-        return orderDAO.allReserves(customer);
+        return saleDAO.allReserves(customer);
     }
 
     @Override
     public List<Sale> allSales(Customer customer) {
-        return orderDAO.allSales(customer);
+        return saleDAO.allSales(customer);
     }
 
 }

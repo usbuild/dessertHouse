@@ -6,8 +6,6 @@ import com.lecoding.models.po.Area;
 import com.lecoding.models.po.Customer;
 import com.lecoding.models.po.Sale;
 import com.lecoding.models.service.*;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -93,7 +91,6 @@ public class CustomerController {
     public String reserveDetail(@PathVariable("id") int id, Model model) {
         Sale sale = saleService.findById(id);
         if (sale == null) return null;
-        Logger.getLogger(this.getClass()).log(Level.ERROR, sale.getCustomer().getName());
         if (!sale.getCustomer().getName().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
             return null;
         model.addAttribute("list", sale.getSaleGoods());

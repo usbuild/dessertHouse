@@ -48,6 +48,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
+
     private String role;
 
     @javax.persistence.Column(name = "role", nullable = false, insertable = true, updatable = true, length = 9, precision = 0)
@@ -58,6 +59,18 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    private Shop shop;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
     @Override
