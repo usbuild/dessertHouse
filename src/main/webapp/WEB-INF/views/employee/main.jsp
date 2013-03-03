@@ -23,9 +23,20 @@
             mainContainer.css("height", employeeContainer.height() + 'px');
         };
 
+        var models = [];
+        var registerModel = function (model) {
+            models.push(model);
+        };
+        var invalidateModels = function () {
+            for (var x in models) {
+                models[x].clear();
+            }
+        };
         var routerFunc = function (url) {
             return function () {
                 $.get(baseUrl + url, {}, function (e) {
+                    invalidateModels();
+
                     $("li.active").removeClass("active");
                     $("ul.main-nav a[href $= '" + baseUrl + url + "']").parents("li").addClass("active");
                     $(".employee-container").hide("drop", {direction: "left"}, 300, function () {
@@ -84,6 +95,8 @@
 
         var storeModel = new StoreModel;
         new SearchView({model: storeModel, el: "#store-table"});
+        registerModel(searchModel);
+        registerModel(storeModel);
         $(document).on("change", "#form-search-date", function () {
             storeModel.fetch({
                 data: {
