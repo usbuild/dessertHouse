@@ -15,7 +15,8 @@
             'underscore': 'lib/underscore-min',
             'backbone': 'lib/backbone-min',
             'jquery.form': 'lib/jquery.form',
-            'apprise': 'lib/apprise/apprise-1.5.min'
+            'apprise': 'lib/apprise/apprise-1.5.min',
+            'jquery.ui.effects': 'lib/jquery-ui-effects.min'
         },
 
         shim: {
@@ -35,8 +36,11 @@
             'jquery.form': {
                 deps: ['jquery']
             },
-            'apprise':{
-                deps:['jquery']
+            'apprise': {
+                deps: ['jquery']
+            },
+            'jquery.ui.effects': {
+                deps: ['jquery']
             }
         }
     });

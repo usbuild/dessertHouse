@@ -62,16 +62,20 @@ input[type=submit] {
     float: right;
 }
 
-.customer-container {
+.customer-container, .main-container {
+    height: auto;
     width: 990px;
     border: solid 1px #CCC;
     margin: 0 auto;
     box-shadow: 2px 5px 10px #CCC;
     background-color: white;
     padding: 10px 20px;
+    transition: height 0.3s ease;
+    -webkit-transition: height 0.3s ease;
+    -moz-transition: height 0.3s ease;
 }
 
-.customer-body {
+.customer-body, .user-body {
     background-color: #EEE;
 }
 
