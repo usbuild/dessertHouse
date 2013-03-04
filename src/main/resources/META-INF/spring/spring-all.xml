@@ -37,7 +37,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.lecoding.models.po"/>
+        <property name="packagesToScan" value="com.lecoding.models"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
@@ -60,7 +60,7 @@
         </tx:attributes>
     </tx:advice>
     <aop:config>
-        <aop:pointcut id="allServiceMethod" expression="execution(* com.lecoding.models.service.*.*(..))"/>
+        <aop:pointcut id="allServiceMethod" expression="execution(* com.lecoding.service.*.*(..))"/>
         <aop:advisor advice-ref="serviceAdvice" pointcut-ref="allServiceMethod"/>
     </aop:config>
 

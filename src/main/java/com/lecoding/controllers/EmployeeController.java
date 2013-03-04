@@ -2,13 +2,11 @@ package com.lecoding.controllers;
 
 import com.lecoding.components.Utils;
 import com.lecoding.controllers.forms.BuyForm;
+import com.lecoding.controllers.forms.GoodsForm;
 import com.lecoding.controllers.forms.SimpleResponse;
-import com.lecoding.models.po.Customer;
-import com.lecoding.models.po.User;
-import com.lecoding.models.service.ICustomerService;
-import com.lecoding.models.service.ISaleService;
-import com.lecoding.models.service.IStoreService;
-import com.lecoding.models.service.IUserService;
+import com.lecoding.models.Customer;
+import com.lecoding.models.User;
+import com.lecoding.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -29,9 +27,10 @@ public class EmployeeController {
     ICustomerService customerService;
     @Autowired
     ISaleService saleService;
-
     @Autowired
     IStoreService storeService;
+    @Autowired
+    IGoodsService goodsService;
 
     private User getLoggedUser() {
         return userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -74,12 +73,27 @@ public class EmployeeController {
         return "employee/store";
     }
 
+    @RequestMapping(value = "/goods", headers = "X-Requested-With=XMLHttpRequest")
+    public String goodsList(Model model) {
+        model.addAttribute("goodsForm", new GoodsForm());
+        model.addAttribute("types", goodsService.allGoodsType());
+        model.addAttribute("goodsList", goodsService.allGoods());
+        return "employee/goods";
+    }
+    @RequestMapping(value = "/goods/list", headers = "X-Requested-With=XMLHttpRequest")
+    public String listGoods(Model model){
+        model.addAttribute("goodsList", goodsService.allGoods());
+        return "employee/listgoods";
+    }
+
+
     @RequestMapping(value = "/info", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String userInfo(Model model) {
         return "employee/info";
     }
 
-    @RequestMapping({"/", "", "/store", "info"})
+
+    @RequestMapping({"/", "", "/store", "/info", "/goods"})
     public String main(Model model) {
         model.addAttribute("user", getLoggedUser());
         return "employee/main";

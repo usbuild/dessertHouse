@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 
 <select name="date" id="form-search-date">
     <c:forEach items="${dates}" var="date">
@@ -15,7 +17,7 @@
             <fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></option>
     </c:forEach>
 </select>
-
+<br>
 
 <table class="table" id="store-table">
     <tr>
@@ -33,7 +35,10 @@
             <td>${item.price}</td>
             <td>${item.amount}</td>
             <td>${item.goods.goodsType.name}</td>
-            <td><a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-ok"></i></a></td>
+            <td>
+                <a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-edit"></i></a>
+                <a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-remove"></i></a>
+            </td>
         </tr>
     </c:forEach>
 </table>

@@ -130,6 +130,7 @@
                     return false;
                 }
                 apprise('请输入订购数目', {'input': true, 'textOk': '确认', 'textCancel': '取消'}, function (num) {
+                    if(num === false) return;
                     if (!/\d+/.test(num) || num > store['amount'] || num <= 0) {
                         apprise("数量输入非法");
                         return false;

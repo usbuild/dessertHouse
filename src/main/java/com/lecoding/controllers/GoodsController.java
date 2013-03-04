@@ -1,16 +1,22 @@
 package com.lecoding.controllers;
 
+import com.lecoding.controllers.forms.GoodsForm;
 import com.lecoding.controllers.forms.SearchGoodsForm;
-import com.lecoding.models.po.User;
-import com.lecoding.models.service.IGoodsService;
-import com.lecoding.models.service.IStoreService;
-import com.lecoding.models.service.IUserService;
+import com.lecoding.controllers.forms.SimpleResponse;
+import com.lecoding.controllers.forms.StoreForm;
+import com.lecoding.models.User;
+import com.lecoding.service.IGoodsService;
+import com.lecoding.service.IStoreService;
+import com.lecoding.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -69,4 +75,36 @@ public class GoodsController {
         map.put("data", storeService.searchStore(user.getShop().getId(), "", date));
         return map;
     }
+
+
+    @RequestMapping({"/user/employee/store/add", "/user/employee/store/add/"})
+    @ResponseBody
+    public SimpleResponse addStoreItem(@RequestParam StoreForm storeForm) {
+        return null;
+    }
+
+    @RequestMapping({"/user/employee/goods/add"})
+    @ResponseBody
+    public SimpleResponse addNewGoods(@Valid  GoodsForm goodsForm) {
+        try {
+            return new SimpleResponse(0, goodsService.addGoods(goodsForm));
+        } catch (Exception ex) {
+            return new SimpleResponse(1, null);
+        }
+    }
+
+
+    @RequestMapping({"/user/employee/type/add"})
+    @ResponseBody
+    public SimpleResponse addGoodsType(@RequestParam("name") String name) {
+        if (goodsService.addGoodsType(name)) return new SimpleResponse(0, null);
+        else return new SimpleResponse(1, null);
+    }
+
+    @RequestMapping({"/user/employee/store/del", "/user/employee/store/del/"})
+    public SimpleResponse delStoreItem(@RequestParam int id) {
+
+        return new SimpleResponse(0, null);
+    }
+
 }

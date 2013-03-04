@@ -2,10 +2,10 @@ package com.lecoding.controllers;
 
 import com.lecoding.components.Utils;
 import com.lecoding.controllers.forms.*;
-import com.lecoding.models.po.Area;
-import com.lecoding.models.po.Customer;
-import com.lecoding.models.po.Sale;
-import com.lecoding.models.service.*;
+import com.lecoding.models.Area;
+import com.lecoding.models.Customer;
+import com.lecoding.models.Sale;
+import com.lecoding.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
