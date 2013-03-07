@@ -15,7 +15,7 @@ import java.util.List;
  * DateTime: 13-2-26 上午10:56
  */
 @Service
-public class UserService implements IUserService {
+public class UserServiceImpl implements IUserService {
 
     @Autowired
     IUserDAO userDAO;
@@ -25,5 +25,10 @@ public class UserService implements IUserService {
         List<User> users = userDAO.findByCriteria(Restrictions.eq("name", name));
         if (users.isEmpty()) return null;
         return users.get(0);
+    }
+
+    @Override
+    public List<User> allUsers() {
+        return userDAO.findByCriteria();
     }
 }

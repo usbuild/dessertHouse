@@ -31,6 +31,7 @@ public class AdminController {
 
     @RequestMapping(value = {"/", ""}, headers = "X-Requested-With=XMLHttpRequest")
     public String user(Model model) {
+        model.addAttribute("users", userService.allUsers());
         return "admin/index";
     }
 
