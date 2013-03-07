@@ -51,7 +51,7 @@
                     <c:forEach var="record" items="${records}" varStatus="status">
                         <tr>
                             <td>${status.index + 1}</td>
-                            <td><fmt:formatDate value="${record.createTime}" type="both"/></td>
+                            <td><fmt:formatDate value="${record.createTime}" pattern="yyyy-MM-dd H:m:s"/></td>
                             <td>${record.amount}</td>
                         </tr>
                     </c:forEach>

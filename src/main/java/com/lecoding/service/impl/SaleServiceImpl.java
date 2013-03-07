@@ -47,6 +47,8 @@ public class SaleServiceImpl implements ISaleService {
         double total = 0;
         for (String key : map.keySet()) {
             Store store = storeDAO.findById(Integer.parseInt(key));
+
+
             int num = Integer.parseInt(map.get(key));
             if (store.getAmount() < num) throw new DessertException("库存不足");
             store.setAmount(store.getAmount() - num);

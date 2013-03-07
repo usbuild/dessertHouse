@@ -113,12 +113,16 @@ require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], fun
 
     registerModel(searchModel);
     registerModel(storeModel);
-    $(document).on("change", "#form-search-date", function () {
+
+    var updateStoreTable = function () {
         storeModel.fetch({
             data: {
                 date: $("#form-search-date").val()
             }
         });
+    };
+    $(document).on("change", "#form-search-date", function () {
+        updateStoreTable();
     });
 
 
@@ -165,6 +169,79 @@ require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], fun
             }
         }, 'json');
     });
+
+    $(document).on("click", ".goods-edit-btn", function (evt) {
+        evt.preventDefault();
+        var tr = $(this).parents("tr");
+        var id = $(this).attr("data-id");
+        $.get("/user/employee/goods/edit/" + id, {}, function (e) {
+            var nt = $("<tr/>");
+            nt.html(e).hide();
+            nt.attr("data-id", id);
+            tr.after(nt);
+            adjMainContainer(function () {
+                tr.hide();
+                nt.show();
+            });
+        });
+
+    });
+    $(document).on("click", ".goods-edit-cancel", function () {
+        var tr = $(this).parents("tr");
+        var oldTr = tr.prev();
+        adjMainContainer(function () {
+            tr.remove();
+            oldTr.show();
+        });
+    });
+    $(document).on("click", ".goods-edit-confirm", function () {
+        var tr = $(this).parents("tr");
+        var id = tr.attr("data-id");
+        var data = {
+            sid: tr.find(".var-sid").val(),
+            name: tr.find(".var-name").val(),
+            type: tr.find(".var-type").val()
+        };
+        $.post("/user/employee/goods/edit/" + id, data, function (e) {
+            if (e.code == 0) {
+                var otr = tr.prev();
+                var tds = otr.find("td");
+                tds[0].innerHTML = data.sid;
+                tds[1].innerHTML = data.name;
+                tds[2].innerHTML = data.type;
+                tr.hide();
+                otr.show();
+
+            } else {
+                apprise(e.data);
+            }
+        }, "json");
+    });
+
+    $(document).on("submit", "#add-store-form", function (evt) {
+        evt.preventDefault();
+        var form = $(this);
+        $.post("/user/employee/store/add", $(this).serialize(), function (e) {
+            if (e.code == 0) {
+                form.get(0).reset();
+                updateStoreTable();
+            } else {
+                apprise("添加失败，" + e.data);
+            }
+        }, "json");
+    });
+    $(document).on("click", ".del-store-btn", function (evt) {
+        evt.preventDefault();
+        var t = $(this);
+        $.post("/user/employee/store/del", {id: t.attr("data-id")}, function (e) {
+            if (e.code == 0) {
+                updateStoreTable();
+            } else {
+                apprise("删除失败， " + e.data);
+            }
+        }, "json");
+    });
+
 
     var orderModel = {};
 
@@ -279,6 +356,7 @@ require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], fun
     </tr>
 </script>
 
+
 <script type="text/html" id="store-template">
     <tr>
         <th>编号</th>
@@ -296,8 +374,7 @@ require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], fun
         <td><@= item.amount @></td>
         <td><@= item.goods.goodsType.name @></td>
         <td>
-            <a class="btn buy-btn" href="#" data-id='<@= key@>'><i class="icon-edit"></i></a>
-            <a class="btn buy-btn" href="#" data-id='<@= key@>'><i class="icon-remove"></i></a>
+            <a class="btn del-store-btn" href="#" data-id='<@= item.id@>'><i class="icon-remove"></i></a>
         </td>
     </tr>
     <@ }); @>

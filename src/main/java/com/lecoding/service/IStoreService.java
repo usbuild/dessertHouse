@@ -1,6 +1,5 @@
 package com.lecoding.service;
 
-import com.lecoding.components.DessertException;
 import com.lecoding.controllers.forms.StoreForm;
 import com.lecoding.models.Store;
 import com.lecoding.models.User;
@@ -15,6 +14,6 @@ import java.util.List;
  */
 public interface IStoreService {
     List<Store> searchStore(int shopId, String key, Date date);
-    void addStore(StoreForm form) throws DessertException;
+    Store addStore(StoreForm form);
     boolean delStore(int id, User user);
 }

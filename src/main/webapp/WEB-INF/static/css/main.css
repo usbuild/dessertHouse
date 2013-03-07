@@ -1,3 +1,8 @@
+a{
+  transition: color 0.3s;
+  -webkit-transition: color 0.3s;
+  -moz-transition: color 0.3s;
+}
 .login-form {
     width: 400px;
     margin: 100px auto;
@@ -62,7 +67,7 @@ input[type=submit] {
     float: right;
 }
 
-.customer-container, .main-container {
+.main-container {
     height: auto;
     width: 990px;
     border: solid 1px #CCC;
@@ -81,4 +86,13 @@ input[type=submit] {
 
 form .error-msg {
     display: block;
+}
+table input{
+    width: 100px;
+}
+table select{
+    width: 100px;
+}
+#goods-table td{
+    width: 250px;
 }

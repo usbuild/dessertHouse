@@ -16,7 +16,8 @@
             'backbone': 'lib/backbone-min',
             'jquery.form': 'lib/jquery.form',
             'apprise': 'lib/apprise/apprise-1.5.min',
-            'jquery.ui.effects': 'lib/jquery-ui-effects.min'
+            'jquery.ui.effects': 'lib/jquery-ui-effects.min',
+            'highcharts':'lib/highcharts/highcharts'
         },
 
         shim: {

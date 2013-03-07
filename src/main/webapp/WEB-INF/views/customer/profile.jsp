@@ -16,7 +16,7 @@
     <tr>
         <td>账户余额：</td>
         <td>${user.amount}</td>
-        <td><a href="/customer/pay">立即充值</a></td>
+        <td><a href="/customer/pay" class="router-link">立即充值</a></td>
     </tr>
     <tr>
         <td>状态：</td>
@@ -33,7 +33,7 @@
                 </c:when>
             </c:choose>
         </td>
-        <td><a href="/customer/password">修改密码</a></td>
+        <td><a href="/customer/password" class="router-link">修改密码</a></td>
     </tr>
 </table>
 <a href="/j_spring_security_logout" class="customer-exit">退出</a>

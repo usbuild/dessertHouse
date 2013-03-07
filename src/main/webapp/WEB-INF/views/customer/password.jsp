@@ -24,6 +24,6 @@
         <s:password path="password"/>
         <s:label path="rePassword">确认密码</s:label>
         <s:password path="rePassword"/>
-        <input type="submit" class="btn btn-primary">
+        <input type="submit" class="btn btn-primary" value="修改">
     </fieldset>
 </s:form>

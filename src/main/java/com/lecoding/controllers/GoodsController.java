@@ -12,11 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -40,6 +39,10 @@ public class GoodsController {
         binder.registerCustomEditor(Date.class, editor);
     }
 
+    private User getLoggedUser() {
+        return userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
     @Autowired
     IGoodsService goodsService;
     @Autowired
@@ -60,32 +63,58 @@ public class GoodsController {
     @RequestMapping({"/user/employee/search", "/user/employee/search/"})
     @ResponseBody
     public Map userSearchGoods(@RequestParam("key") String key) throws UnsupportedEncodingException {
-        User user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = getLoggedUser();
         Map<String, Object> map = new HashMap<String, Object>();
         key = new String(key.getBytes("ISO-8859-1"), "UTF-8");
         map.put("data", storeService.searchStore(user.getShop().getId(), key, new Date()));
         return map;
     }
 
-    @RequestMapping({"/user/employee/store/list", "/user/employee/store/list/"})
+    @RequestMapping({"/user/employee/store/list"})
     @ResponseBody
     public Map userSearchGoods(@RequestParam("date") Date date) throws UnsupportedEncodingException {
-        User user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = getLoggedUser();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("data", storeService.searchStore(user.getShop().getId(), "", date));
         return map;
     }
 
 
-    @RequestMapping({"/user/employee/store/add", "/user/employee/store/add/"})
+    @RequestMapping({"/user/employee/store/add"})
     @ResponseBody
-    public SimpleResponse addStoreItem(@RequestParam StoreForm storeForm) {
-        return null;
+    public SimpleResponse addStoreItem(@Valid StoreForm storeForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return new SimpleResponse(1, bindingResult.getAllErrors().get(0).getDefaultMessage());
+        try {
+            storeForm.setUser(getLoggedUser());
+            storeService.addStore(storeForm);
+            return new SimpleResponse(0, null);
+        } catch (Exception ex) {
+            return new SimpleResponse(1, ex.getMessage());
+        }
     }
+
+    @RequestMapping(value = {"/user/employee/goods/edit/{id}"}, method = RequestMethod.GET)
+    public String editGoodsView(Model model, @PathVariable("id") int id) {
+        model.addAttribute("goods", goodsService.findById(id));
+        model.addAttribute("types", goodsService.allGoodsType());
+        return "employee/edit_goods";
+    }
+
+    @RequestMapping(value = {"/user/employee/goods/edit/{id}"}, method = RequestMethod.POST)
+    @ResponseBody
+    public SimpleResponse editGoods(@Valid GoodsForm goodsForm, @PathVariable("id") int id) {
+        try {
+            return new SimpleResponse(0, goodsService.updateGoods(id, goodsForm));
+        } catch (Exception ex) {
+            return new SimpleResponse(1, ex.getMessage());
+        }
+    }
+
 
     @RequestMapping({"/user/employee/goods/add"})
     @ResponseBody
-    public SimpleResponse addNewGoods(@Valid  GoodsForm goodsForm) {
+    public SimpleResponse addNewGoods(@Valid GoodsForm goodsForm) {
         try {
             return new SimpleResponse(0, goodsService.addGoods(goodsForm));
         } catch (Exception ex) {
@@ -101,10 +130,15 @@ public class GoodsController {
         else return new SimpleResponse(1, null);
     }
 
-    @RequestMapping({"/user/employee/store/del", "/user/employee/store/del/"})
+    @RequestMapping({"/user/employee/store/del"})
+    @ResponseBody
     public SimpleResponse delStoreItem(@RequestParam int id) {
-
-        return new SimpleResponse(0, null);
+        try {
+            storeService.delStore(id, getLoggedUser());
+            return new SimpleResponse(0, null);
+        } catch (Exception ex) {
+            return new SimpleResponse(0, ex.getMessage());
+        }
     }
 
 }

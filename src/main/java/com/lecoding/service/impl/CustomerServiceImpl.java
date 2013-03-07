@@ -76,7 +76,7 @@ public class CustomerServiceImpl implements ICustomerService {
         if (money >= 100 && customer.getStatus().equals(Customer.StatusType.nouse)) {
             customer.setStatus(Customer.StatusType.active);
         }
-        return this.add(customer) && payRecordService.insert(customer, money);
+        return this.update(customer) && payRecordService.insert(customer, money);
     }
 
 }

@@ -4,6 +4,7 @@ import com.lecoding.components.Utils;
 import com.lecoding.controllers.forms.BuyForm;
 import com.lecoding.controllers.forms.GoodsForm;
 import com.lecoding.controllers.forms.SimpleResponse;
+import com.lecoding.controllers.forms.StoreForm;
 import com.lecoding.models.Customer;
 import com.lecoding.models.User;
 import com.lecoding.service.*;
@@ -69,7 +70,8 @@ public class EmployeeController {
         User user = getLoggedUser();
         model.addAttribute("dates", Utils.getNextWeek());
         model.addAttribute("goods", storeService.searchStore(user.getShop().getId(), "", Utils.getNextWeek().get(0)));
-
+        model.addAttribute("allGoods", goodsService.allGoods());
+        model.addAttribute("storeForm", new StoreForm());
         return "employee/store";
     }
 
@@ -89,6 +91,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/info", method = RequestMethod.GET, headers = "X-Requested-With=XMLHttpRequest")
     public String userInfo(Model model) {
+        model.addAttribute("user", getLoggedUser());
         return "employee/info";
     }
 

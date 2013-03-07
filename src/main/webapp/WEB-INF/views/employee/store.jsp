@@ -11,13 +11,26 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<select name="date" id="form-search-date">
-    <c:forEach items="${dates}" var="date">
-        <option value="<fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/>">
-            <fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></option>
-    </c:forEach>
-</select>
-<br>
+<form:form modelAttribute="storeForm" cssClass="form-inline" id="add-store-form">
+    <form:select name="date" id="form-search-date" path="date">
+        <c:forEach items="${dates}" var="date">
+            <option value="<fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/>">
+                <fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/>
+            </option>
+        </c:forEach>
+    </form:select>
+    <form:select path="goodsId">
+        <c:forEach items="${allGoods}" var="item">
+            <form:option value="${item.id}">${item.name}</form:option>
+        </c:forEach>
+    </form:select>
+    <form:label path="amount">数量</form:label>
+    <form:input path="amount"/>
+    <form:label path="price">价格</form:label>
+    <form:input path="price"/>
+    <button type="submit" id="add-store-btn" class="btn btn-primary">添加</button>
+</form:form>
+
 
 <table class="table" id="store-table">
     <tr>
@@ -36,8 +49,7 @@
             <td>${item.amount}</td>
             <td>${item.goods.goodsType.name}</td>
             <td>
-                <a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-edit"></i></a>
-                <a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-remove"></i></a>
+                <a class="btn del-store-btn" href="#" data-id='${item.id}'><i class="icon-remove"></i></a>
             </td>
         </tr>
     </c:forEach>

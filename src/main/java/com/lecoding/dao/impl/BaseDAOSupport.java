@@ -50,6 +50,7 @@ public abstract class BaseDAOSupport<T extends Serializable> implements IBaseDAO
         return (T) getSession().get(getPersistentClass(), id);
     }
 
+
     public Class<T> getPersistentClass() {
         return persistentClass;
     }

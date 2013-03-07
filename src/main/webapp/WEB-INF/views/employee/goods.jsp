@@ -24,7 +24,6 @@
 </form:form>
 <table class="table" id="goods-table">
     <tr>
-        <th>序号</th>
         <th>编号</th>
         <th>名称</th>
         <th>类型</th>
@@ -32,13 +31,11 @@
     </tr>
     <c:forEach var="item" items="${goodsList}" varStatus="status">
         <tr>
-            <td>${status.index + 1}</td>
             <td>${item.sid}</td>
             <td>${item.name}</td>
             <td>${item.goodsType.name}</td>
             <td>
-                <a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-edit"></i></a>
-                <a class="btn buy-btn" href="#" data-id='${item.id}'><i class="icon-remove"></i></a>
+                <a class="btn goods-edit-btn" href="#" data-id='${item.id}'><i class="icon-edit"></i></a>
             </td>
         </tr>
     </c:forEach>

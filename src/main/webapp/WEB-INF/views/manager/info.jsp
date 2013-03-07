@@ -9,5 +9,4 @@
 <fieldset>
     <legend>个人信息</legend>
     <div class="alert-block">用户名：<strong>${user.name}</strong></div>
-    <div class="alert-block">所属店铺：<strong>${user.shop.name}</strong></div>
 </fieldset>

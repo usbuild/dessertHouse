@@ -1,5 +1,8 @@
 package com.lecoding.controllers.forms;
 
+import com.lecoding.models.User;
+import org.hibernate.validator.constraints.Range;
+
 import java.util.Date;
 
 /**
@@ -10,18 +13,17 @@ import java.util.Date;
 public class StoreForm {
     private Date date;
     private int goodsId;
-    private String goodsName;
-    private String goodsType;
+    @Range(min = 1, message = "数量不能为0")
     private int amount;
     private double price;
-    private int userId;
+    private User user;
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Date getDate() {
@@ -40,21 +42,6 @@ public class StoreForm {
         this.goodsId = goodsId;
     }
 
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
-    }
 
     public int getAmount() {
         return amount;

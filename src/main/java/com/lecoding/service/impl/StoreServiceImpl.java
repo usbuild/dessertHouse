@@ -4,15 +4,16 @@ import com.lecoding.components.DessertException;
 import com.lecoding.controllers.forms.StoreForm;
 import com.lecoding.dao.IGoodsDAO;
 import com.lecoding.dao.IGoodsTypeDAO;
+import com.lecoding.dao.ISaleDAO;
 import com.lecoding.dao.IStoreDAO;
-import com.lecoding.models.GoodsType;
+import com.lecoding.models.Goods;
 import com.lecoding.models.Store;
 import com.lecoding.models.User;
 import com.lecoding.service.IStoreService;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class StoreServiceImpl implements IStoreService {
     IStoreDAO storeDAO;
 
     @Autowired
+    ISaleDAO saleDAO;
+
+    @Autowired
     IGoodsDAO goodsDAO;
 
     @Autowired
@@ -40,8 +44,18 @@ public class StoreServiceImpl implements IStoreService {
     }
 
     @Override
-    public void addStore(StoreForm form) throws DessertException {
-        List<GoodsType> goodsTypes = goodsTypeDAO.findByCriteria(Restrictions.eq("name", form.getGoodsType()));
+    public Store addStore(StoreForm form) {
+
+        Goods goods = goodsDAO.findById(form.getGoodsId());
+        if (goods == null) throw new DessertException("Goods Not Found!");
+        Store store = new Store();
+        store.setAmount(form.getAmount());
+        store.setGoods(goods);
+        store.setPrice(form.getPrice());
+        store.setSaleTime(new Timestamp(form.getDate().getTime()));
+        store.setShop(form.getUser().getShop());
+        storeDAO.save(store);
+        return store;
     }
 
     @Override
@@ -51,6 +65,8 @@ public class StoreServiceImpl implements IStoreService {
             return false;
         } else {
             try {
+
+
                 storeDAO.delete(store);
                 return true;
             } catch (Exception ex) {

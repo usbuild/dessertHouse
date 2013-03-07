@@ -14,13 +14,24 @@
 <jsp:include page="../libs.jsp"/>
 
 <script type="text/javascript">
-    require(['bootstrap', 'backbone', 'apprise'], function () {
+    require(['jquery', 'bootstrap', 'backbone', 'apprise', "jquery.ui.effects"], function () {
+
+        var startAdj = function () {
+            $(".main-container").css("max-height", $(".customer-container").height() + 'px');
+        };
+        var endAdj = function () {
+            $(".main-container").css("max-height", "").css("height", $(".customer-container").height() + 'px');
+        };
+
 
         var routerFunc = function (url) {
             return function () {
                 $.get("/customer/" + url, {}, function (data) {
-                    $(".customer-container").slideUp(function () {
-                        $(this).html(data).slideDown();
+                    $(".customer-container").hide("drop", {direction: "left"}, 300, function () {
+                        startAdj();
+                        $(this).html(data);
+                        $(this).fadeIn(200);
+                        endAdj();
                     });
                 });
             };
@@ -88,7 +99,9 @@
                     this.el = "#search-result-table";
                 },
                 render: function () {
+                    startAdj();
                     $(this.el).html(_.template($('#search-template').html(), {'model': this.model}));
+                    endAdj();
                 }
             });
             new SearchView({model: searchModel});
@@ -115,7 +128,9 @@
                 evt.preventDefault();
                 $("form .error-msg").remove();
                 $.post($(this).attr('action'), $(this).serialize(), function (data) {
+                    startAdj();
                     $(".customer-container").html(data);
+                    endAdj();
                     updateProfile();
                 });
             });
@@ -130,13 +145,15 @@
                     return false;
                 }
                 apprise('请输入订购数目', {'input': true, 'textOk': '确认', 'textCancel': '取消'}, function (num) {
-                    if(num === false) return;
+                    if (num === false) return;
                     if (!/\d+/.test(num) || num > store['amount'] || num <= 0) {
                         apprise("数量输入非法");
                         return false;
                     } else {
                         store['amount'] = num;
+                        startAdj();
                         $("#order-result-table").append(_.template($("#order-template").html(), {item: store}));
+                        endAdj();
                         orderModel[store.id] = store;
                     }
                 });
@@ -209,7 +226,7 @@
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand router-link" href="/customer">甜品屋</a>
+            <a class="brand router-link" href="/customer/">甜品屋</a>
 
             <div class="nav-collapse collapse pull-right">
                 <ul class="nav pull-right">
@@ -225,9 +242,10 @@
         </div>
     </div>
 </div>
+<div class="main-container">
+    <div class="customer-container">
 
-<div class="customer-container">
-
+    </div>
 </div>
 </body>
 </html>

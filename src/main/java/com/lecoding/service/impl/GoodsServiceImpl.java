@@ -27,6 +27,24 @@ public class GoodsServiceImpl implements IGoodsService {
     IGoodsTypeDAO goodsTypeDAO;
 
     @Override
+    public Goods findById(int id) {
+        return goodsDAO.findById(id);
+    }
+
+    @Override
+    public Goods updateGoods(int id, GoodsForm goodsForm) {
+        Goods goods = goodsDAO.findById(id);
+        if (goods == null) throw new DessertException("Goods not found");
+        List<GoodsType> goodsTypes = goodsTypeDAO.findByCriteria(Restrictions.eq("name", goodsForm.getType()));
+        if (goodsTypes.isEmpty()) throw new DessertException("Goods Type Not Found");
+        goods.setSid(goodsForm.getSid());
+        goods.setName(goodsForm.getName());
+        goods.setGoodsType(goodsTypes.get(0));
+        goodsDAO.update(goods);
+        return goods;
+    }
+
+    @Override
     public List<Goods> allGoods() {
         return goodsDAO.findByCriteria();
     }
@@ -50,10 +68,10 @@ public class GoodsServiceImpl implements IGoodsService {
     }
 
     @Override
-    public Goods addGoods(GoodsForm goodsForm){
+    public Goods addGoods(GoodsForm goodsForm) {
         Goods goods = new Goods();
         List<GoodsType> goodsTypes = goodsTypeDAO.findByCriteria(Restrictions.eq("name", goodsForm.getType()));
-        if(goodsTypes.isEmpty()) throw new DessertException("Goods Type Not Found");
+        if (goodsTypes.isEmpty()) throw new DessertException("Goods Type Not Found");
         GoodsType type = goodsTypes.get(0);
         goods.setGoodsType(type);
         goods.setName(goodsForm.getName());

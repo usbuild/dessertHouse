@@ -12,6 +12,8 @@ import java.util.List;
  * DateTime: 13-2-27 下午9:44
  */
 public interface IGoodsService {
+    Goods findById( int id);
+    Goods updateGoods(int id, GoodsForm goodsForm);
     List<Goods> allGoods();
 
     List<GoodsType> allGoodsType();

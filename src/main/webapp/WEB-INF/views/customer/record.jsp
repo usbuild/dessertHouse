@@ -20,7 +20,7 @@
         <tr>
             <td>${status.index + 1}</td>
             <td>${reserve.total}</td>
-            <td><fmt:formatDate value="${reserve.createTime}" pattern="yyyy-MM-dd h:m:s"/></td>
+            <td><fmt:formatDate value="${reserve.createTime}" pattern="yyyy-MM-dd H:m:s"/></td>
             <td><a class="btn order-detail-btn" href="javascript:;" data-id="${reserve.id}"><i class="icon-th"></i></a></td>
         </tr>
     </c:forEach>
