@@ -19,7 +19,7 @@ import java.util.Collection;
 public class UserController {
     @RequestMapping("/login")
     public ModelAndView login() {
-        return new ModelAndView("admin/login");
+        return new ModelAndView("user/login");
     }
 
     @SuppressWarnings("unchecked")
