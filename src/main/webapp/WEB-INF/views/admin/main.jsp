@@ -10,7 +10,7 @@
 <head>
     <jsp:include page="../libs.jsp"/>
     <script type="text/javascript">
-        require(['jquery', 'bootstrap', 'backbone', "jquery.ui.effects"], function () {
+        require(['jquery', 'bootstrap', 'backbone', "apprise", "jquery.ui.effects"], function () {
             var baseUrl = "/user/admin";
             var startAdj = function () {
                 $(".main-container").css("max-height", $(".admin-container").height() + 'px');
@@ -51,6 +51,18 @@
             $(document).on('click', '.router-link', function (evt) {
                 evt.preventDefault();
                 router.navigate($(this).attr("href"), true);
+            });
+
+            $(document).on("submit", "form#user", function (evt) {
+                evt.preventDefault();
+                var data = $(this).serializeArray();
+                $.post(baseUrl + "/add_user", data, function (e) {
+                    if (e.code == 0) {
+                        routerFunc("/")();
+                    } else {
+                        apprise("添加失败" +e.data);
+                    }
+                }, "json");
             });
         });
     </script>

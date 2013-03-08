@@ -1,5 +1,6 @@
 package com.lecoding.service;
 
+import com.lecoding.controllers.forms.UserSignUpForm;
 import com.lecoding.models.User;
 
 import java.util.List;
@@ -12,6 +13,6 @@ import java.util.List;
 
 public interface IUserService {
     User findByName(String name);
-
+    void addUser(UserSignUpForm userSignUpForm);
     List<User> allUsers();
 }
