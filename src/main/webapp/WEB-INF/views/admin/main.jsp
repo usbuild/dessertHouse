@@ -39,11 +39,13 @@
                     "user/admin/": "index",
                     "user/admin": "index",
                     "user/admin/info": "info",
-                    "user/admin/discount": "discount"
+                    "user/admin/discount": "discount",
+                    "user/admin/shop": "shop"
                 },
                 index: routerFunc("/"),
                 info: routerFunc("/info"),
-                discount: routerFunc("/discount")
+                discount: routerFunc("/discount"),
+                shop: routerFunc("/shop")
             });
             var router = new Router;
             Backbone.history.start({pushState: true});
@@ -60,10 +62,63 @@
                     if (e.code == 0) {
                         routerFunc("/")();
                     } else {
-                        apprise("添加失败" +e.data);
+                        apprise("添加失败, " + e.data);
                     }
                 }, "json");
             });
+
+            $(document).on("click", ".user-delete-btn", function (evt) {
+                evt.preventDefault();
+                var id = $(this).attr("data-id");
+                $.post("/user/admin/del_user", {'id': id}, function (e) {
+                    if (e.code == 0) {
+                        routerFunc("/")();
+                    } else {
+                        apprise("删除失败，" + e.data);
+                    }
+                }, "json");
+            });
+
+            $(document).on("submit", "#add-shop-form", function (evt) {
+                evt.preventDefault();
+                $.post("/user/admin/add_shop", {name: $("#shop_name").val()}, function (e) {
+                    if (e.code == 0) {
+                        routerFunc("/shop")();
+                    } else {
+                        apprise("添加失败, " + e.data);
+                    }
+                }, "json");
+            });
+
+            $(document).on("click", ".shop-delete-btn", function (evt) {
+                evt.preventDefault();
+                var id = $(this).attr('data-id');
+                $.post("/user/admin/del_shop", {'id': id}, function (e) {
+                    if (e.code == 0) {
+                        routerFunc("/shop")();
+                    } else {
+                        apprise("删除失败，" + e.data);
+                    }
+                }, "json");
+            });
+
+            $(document).on("click", ".discount-edit-btn", function (evt) {
+                evt.preventDefault();
+                var id = $(this).attr("data-id");
+                apprise("新的数值", {input: true}, function (e) {
+                    if (e != false) {
+                        $.post("/user/admin/set_discount", {'id': id, discount: e}, function (e) {
+                            if (e.code == 0) {
+                                routerFunc("/discount")();
+                            } else {
+                                apprise("修改失败，" + e.data);
+                            }
+                        }, "json");
+                    }
+                });
+            });
+
+
         });
     </script>
 </head>
@@ -74,6 +129,7 @@
             <a class="brand router-link" href="/user/admin/">甜品屋</a>
             <ul class="nav main-nav">
                 <li><a href="/user/admin/" class="router-link">成员管理</a></li>
+                <li><a href="/user/admin/shop" class="router-link">店铺管理</a></li>
                 <li><a href="/user/admin/discount" class="router-link">折扣管理</a></li>
             </ul>
 

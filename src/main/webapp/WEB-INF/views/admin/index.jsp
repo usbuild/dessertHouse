@@ -43,7 +43,7 @@
             <td>${user.role}</td>
             <td><c:if test="${user.shop != null}"> ${user.shop.name}</c:if></td>
             <td>
-                <a class="btn goods-edit-btn" href="#" data-id='${user.id}'><i class="icon-edit"></i></a>
+                <a class="btn user-delete-btn" href="#" data-id='${user.id}'><i class="icon-remove"></i></a>
             </td>
         </tr>
     </c:forEach>

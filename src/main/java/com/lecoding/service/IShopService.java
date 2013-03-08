@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface IShopService {
     List<Shop> allShops();
+    void insert(String name);
+    void deleteById(int id);
 }

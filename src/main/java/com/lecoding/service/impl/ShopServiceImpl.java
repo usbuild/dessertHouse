@@ -23,4 +23,18 @@ public class ShopServiceImpl implements IShopService {
     public List<Shop> allShops() {
         return shopDAO.findByCriteria();
     }
+
+    @Override
+    public void insert(String name) {
+        Shop shop = new Shop();
+        shop.setName(name);
+        shopDAO.save(shop);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        Shop shop = new Shop();
+        shop.setId(id);
+        shopDAO.delete(shop);
+    }
 }

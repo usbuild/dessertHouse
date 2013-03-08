@@ -37,6 +37,13 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public void delById(int id) {
+        User user = new User();
+        user.setId(id);
+        userDAO.delete(user);
+    }
+
+    @Override
     public void addUser(UserSignUpForm userSignUpForm) {
         User user = new User();
         if (findByName(userSignUpForm.getName()) != null) throw new DessertException("用户已存在");

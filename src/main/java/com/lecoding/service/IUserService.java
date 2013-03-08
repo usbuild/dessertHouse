@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface IUserService {
     User findByName(String name);
+    void delById(int id);
     void addUser(UserSignUpForm userSignUpForm);
     List<User> allUsers();
 }
