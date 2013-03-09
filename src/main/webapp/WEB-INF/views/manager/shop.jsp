@@ -76,8 +76,8 @@
                 {
                     name: '预定',
                     data: [
-                        <c:forEach var="reserves" items="${reserves}">
-                        ${sale.value},
+                        <c:forEach var="reserve" items="${reserves}">
+                        20,
                         </c:forEach>
                     ]
                 }
