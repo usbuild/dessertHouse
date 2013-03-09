@@ -2,6 +2,7 @@ package com.lecoding.dao.impl;
 
 import com.lecoding.dao.ICustomerDAO;
 import com.lecoding.models.Customer;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 

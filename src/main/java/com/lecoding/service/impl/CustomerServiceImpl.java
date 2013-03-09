@@ -9,6 +9,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Usbuild
@@ -76,6 +79,10 @@ public class CustomerServiceImpl implements ICustomerService {
         if (money >= 100 && customer.getStatus().equals(Customer.StatusType.nouse)) {
             customer.setStatus(Customer.StatusType.active);
         }
+        if (customer.getStatus().equals(Customer.StatusType.pause)) {
+            customer.setStatus(Customer.StatusType.active);
+        }
+        customer.setLastPay(new Timestamp(new Date().getTime()));
         return this.update(customer) && payRecordService.insert(customer, money);
     }
 

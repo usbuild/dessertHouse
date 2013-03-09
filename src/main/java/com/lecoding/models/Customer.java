@@ -129,6 +129,18 @@ public class Customer implements Serializable {
         this.lastPay = lastPay;
     }
 
+    private int level = 0;
+
+    @Column(name = "level")
+    @Basic
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

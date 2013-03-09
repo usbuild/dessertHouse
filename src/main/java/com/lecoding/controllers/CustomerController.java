@@ -66,7 +66,9 @@ public class CustomerController {
 
     @RequestMapping("/disable")
 
-    public @ResponseBody SimpleResponse disableAccount() {
+    public
+    @ResponseBody
+    SimpleResponse disableAccount() {
         if (customerService.disable(customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()))) {
             SecurityContextHolder.clearContext();
             return new SimpleResponse(0, null);
@@ -79,8 +81,12 @@ public class CustomerController {
     @RequestMapping(value = {"/reserve"}, headers = "X-Requested-With=XMLHttpRequest")
     @ResponseBody
     public SimpleResponse reserve(@RequestParam Map<String, String> map) {
+        Customer customer = customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (customer.getStatus().equals(Customer.StatusType.pause)) {
+            return new SimpleResponse(1, "您的帐号已被暂停，请先充值");
+        }
         try {
-            saleService.addReserve(map, customerService.findByName(SecurityContextHolder.getContext().getAuthentication().getName()));
+            saleService.addReserve(map, customer);
             return new SimpleResponse(0, null);
         } catch (Exception ex) {
             return new SimpleResponse(1, ex.getMessage());
