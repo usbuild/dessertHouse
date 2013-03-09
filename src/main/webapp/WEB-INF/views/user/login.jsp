@@ -49,8 +49,9 @@
                     记住我
                 </label>
             </div>
-
-            <input name="submit" type="submit" value="登录" class="btn btn-primary"/>
+            <div class="controls">
+                <input name="submit" type="submit" value="登录" class="btn btn-primary"/>
+            </div>
         </fieldset>
     </form>
 </div>

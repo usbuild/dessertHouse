@@ -21,7 +21,9 @@
 <div class="login-form">
     <form name='f' action='/customer/j_spring_security_check' method='POST' class="form-horizontal">
         <fieldset>
-            <legend><i>甜品店</i> &nbsp; &nbsp;&nbsp;用户登录</legend>
+            <legend>甜品店 &nbsp; &nbsp;&nbsp;
+                <small><b>用户登录</b></small>
+            </legend>
             <c:if test="${not empty param.error}">
                 <div class="alert alert-error">
                         ${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}
@@ -49,8 +51,10 @@
                     记住我
                 </label>
             </div>
-
-            <input name="submit" type="submit" value="登录" class="btn btn-primary"/>
+            <div class="controls">
+                <input name="submit" type="submit" value="登录" class="btn btn-primary"/>
+                <a class="btn btn-info" href="/customer/signup">注册</a>
+            </div>
         </fieldset>
     </form>
 </div>

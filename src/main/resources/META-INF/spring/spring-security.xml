@@ -22,7 +22,11 @@
                              default-target-url="/user/" always-use-default-target="true"/>
     </security:http>
     <security:authentication-manager id="userAuthentication">
-        <security:authentication-provider user-service-ref="userDetailService"/>
+        <security:authentication-provider user-service-ref="userDetailService">
+            <security:password-encoder hash="md5">
+                <security:salt-source user-property="username"/>
+            </security:password-encoder>
+        </security:authentication-provider>
     </security:authentication-manager>
 
 

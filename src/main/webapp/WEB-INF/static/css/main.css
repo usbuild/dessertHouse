@@ -1,14 +1,42 @@
-a{
-  transition: color 0.3s;
-  -webkit-transition: color 0.3s;
-  -moz-transition: color 0.3s;
+body {
+    background-image: url("/static/images/background.jpg");
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
+
+a:hover {
+    text-decoration: none;
+}
+
+a {
+    transition: color 0.3s;
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+}
+
 .login-form {
     width: 400px;
     margin: 100px auto;
-    border-radius: 10px;
+    border-radius: 1px;
     border: solid 1px #8F8A89;
     padding: 20px;
+    background-color: rgba(255, 255, 255, 0.54);
+}
+
+.signup-form {
+    width: 200px;
+    margin: 100px auto;
+    border-radius: 1px;
+    border: solid 1px #8F8A89;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.54);
+}
+
+.login-form form {
+    margin: auto;
+    width: 300px;
 }
 
 .form-horizontal .controls {
@@ -25,20 +53,54 @@ input[type=text], input[type=password] {
 }
 
 input[type=submit] {
-    display: block;
     margin: 0 auto;
 }
 
 .index-body {
-    background-image: url("/static/images/index_header.jpg");
+    background-image: url("/static/images/background.png");
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
-.signup-form {
-    width: 200px;
-    margin: 50px auto 10px auto;
-    padding: 10px 20px;
-    border: solid 2px #CCC;
-    border-radius: 10px;
+.footer {
+    text-align: center;
+    font-size: 13px;
+    font-family: sans-serif;
+}
+
+.index-main-div {
+    width: 400px;
+    height: 300px;
+    margin: 200px auto;
+    border-radius: 5px;
+    border: solid 2px #85353E;
+    padding: 20px;
+}
+
+.index-main-div .logo {
+    height: 200px;
+    width: 170px;
+    margin: auto;
+}
+
+.index-main-div .content {
+    margin: -20px;
+    height: 140px;
+    background-color: #85353E;
+}
+
+.index-main-div .login {
+    font-size: 20px;
+    text-align: center;
+    line-height: 140px;
+}
+
+.index-main-div .not-login {
+    width: 170px;
+    margin: auto;
+    padding-top: 50px;
 }
 
 .signup-form span.alert {
@@ -48,13 +110,13 @@ input[type=submit] {
 .customer-profile-container {
     width: 230px;
     border: solid 1px #CCC;
-    border-radius: 5px;
+    border-radius: 1px;
     padding: 10px;
     position: absolute;
     z-index: 10;
     left: -180px;
     display: none;
-    background-color: rgba(255, 255, 255, 0.69);
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .customer-profile-container td {
@@ -65,6 +127,27 @@ input[type=submit] {
 .customer-exit {
     display: block;
     float: right;
+}
+
+.account-form {
+    display: block;
+    margin: auto;
+    width: 300px;
+}
+
+.password-form {
+    width: 200px;
+    margin: auto;
+}
+
+.password-form .btn {
+    display: block;
+    margin: auto;
+}
+
+.order-submit {
+    display: block;
+    margin: auto;
 }
 
 .main-container {
@@ -87,12 +170,43 @@ input[type=submit] {
 form .error-msg {
     display: block;
 }
-table input{
+
+table input {
     width: 100px;
 }
-table select{
+
+table select {
     width: 100px;
 }
-#goods-table td{
+
+#goods-table td {
     width: 250px;
+}
+
+#total-amount {
+    height: 100px;
+    line-height: 100px;
+    font-size: 25px;
+    text-align: center;
+    min-width: 100px;
+    float: left;
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.buy-submit {
+    height: 100px;
+    display: block;
+    width: 100px;
+    float: left;
+    margin-left: 10px;
+}
+
+.div-box {
+    float: left;
+}
+
+#customer-info-div {
+    margin-top: 130px;
+    height: 20px;
 }

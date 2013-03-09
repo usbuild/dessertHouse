@@ -250,7 +250,7 @@ require(["jquery", "bootstrap", "backbone", "apprise", "jquery.ui.effects"], fun
         for (var i in orderModel) {
             total += orderModel[i].price * orderModel[i].amount;
         }
-        $("#total-amount").val(total);
+        $("#total-amount").html(total);
     };
 
     $(document).on("click", "#search-store-table .buy-btn", function (evt) {

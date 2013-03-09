@@ -14,7 +14,7 @@
 <jsp:include page="../libs.jsp"/>
 
 <script type="text/javascript">
-    require(['jquery', 'bootstrap', 'backbone', 'apprise', "jquery.ui.effects"], function () {
+    require(['jquery', 'bootstrap', 'backbone', 'apprise', "jquery.ui.effects"], function ($, boostrap, Backbone, apprise) {
 
         var startAdj = function () {
             $(".main-container").css("max-height", $(".customer-container").height() + 'px');
@@ -76,15 +76,24 @@
             });
             $(document).on("click", '.cancel-account', function (evt) {
                 evt.preventDefault();
-                $.get("/customer/disable", {}, function (e) {
-                    if (e.code == 0) {
-                        apprise("您的帐号已注销", {}, function () {
-                            window.location.href = "/customer/login";
-                        });
-                    } else {
-                        apprise("帐号注销失败");
+                apprise("您确认要注销帐号？", {confirm: true}, function (e) {
+
+                    if (e) {
+                        $.get("/customer/disable", {}, function (e) {
+                            if (e.code == 0) {
+                                apprise("您的帐号已注销", {}, function () {
+                                    window.location.href = "/customer/login";
+                                });
+                            } else {
+                                apprise("帐号注销失败");
+                            }
+                        }, 'json');
+
                     }
-                }, 'json');
+
+                });
+
+
             });
 
 
@@ -223,7 +232,7 @@
 </head>
 <body class="customer-body">
 
-<div class="navbar navbar-static-top">
+<div class="navbar navbar navbar-static-top">
     <div class="navbar-inner">
         <div class="container">
             <a class="brand router-link" href="/customer/">甜品屋</a>

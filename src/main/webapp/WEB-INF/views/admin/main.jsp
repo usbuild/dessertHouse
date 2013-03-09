@@ -34,6 +34,16 @@
                     });
                 };
             };
+
+            var replaceData = function (url) {
+                $.get(baseUrl + url, {}, function (e) {
+                    $("li.active").removeClass("active");
+                    $("ul.main-nav a[href $= '" + baseUrl + url + "']").parents("li").addClass("active");
+                    startAdj();
+                    $(".admin-container").html(e);
+                    endAdj();
+                });
+            };
             var Router = Backbone.Router.extend({
                 routes: {
                     "user/admin/": "index",
@@ -60,7 +70,7 @@
                 var data = $(this).serializeArray();
                 $.post(baseUrl + "/add_user", data, function (e) {
                     if (e.code == 0) {
-                        routerFunc("/")();
+                        replaceData("/");
                     } else {
                         apprise("添加失败, " + e.data);
                     }
@@ -72,7 +82,7 @@
                 var id = $(this).attr("data-id");
                 $.post("/user/admin/del_user", {'id': id}, function (e) {
                     if (e.code == 0) {
-                        routerFunc("/")();
+                        replaceData("/");
                     } else {
                         apprise("删除失败，" + e.data);
                     }
@@ -83,7 +93,7 @@
                 evt.preventDefault();
                 $.post("/user/admin/add_shop", {name: $("#shop_name").val()}, function (e) {
                     if (e.code == 0) {
-                        routerFunc("/shop")();
+                        replaceData("/shop");
                     } else {
                         apprise("添加失败, " + e.data);
                     }
@@ -95,7 +105,7 @@
                 var id = $(this).attr('data-id');
                 $.post("/user/admin/del_shop", {'id': id}, function (e) {
                     if (e.code == 0) {
-                        routerFunc("/shop")();
+                        replaceData("/shop");
                     } else {
                         apprise("删除失败，" + e.data);
                     }
@@ -109,7 +119,7 @@
                     if (e != false) {
                         $.post("/user/admin/set_discount", {'id': id, discount: e}, function (e) {
                             if (e.code == 0) {
-                                routerFunc("/discount")();
+                                replaceData("/discount");
                             } else {
                                 apprise("修改失败，" + e.data);
                             }
@@ -123,7 +133,7 @@
     </script>
 </head>
 <body class="user-body">
-<div class="navbar navbar-inverse navbar-static-top">
+<div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div class="container">
             <a class="brand router-link" href="/user/admin/">甜品屋</a>

@@ -14,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * Created with IntelliJ IDEA.
  * User: usbuild
@@ -51,11 +53,12 @@ public class AdminController {
 
     @RequestMapping(value = "/add_user", method = RequestMethod.POST)
     @ResponseBody
-    public SimpleResponse addUser(@ModelAttribute UserSignUpForm userSignUpForm, BindingResult bindingResult) {
+    public SimpleResponse addUser(@Valid @ModelAttribute UserSignUpForm userSignUpForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             for (ObjectError error : bindingResult.getAllErrors()) {
-                sb.append(error);
+                sb.append(error.getDefaultMessage());
+                sb.append("<br>");
             }
             return new SimpleResponse(1, sb.toString());
         } else {

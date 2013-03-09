@@ -65,7 +65,7 @@
     </script>
 </head>
 <body class="user-body">
-<div class="navbar navbar-inverse navbar-static-top">
+<div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div class="container">
             <a class="brand router-link" href="/user/manager/">甜品屋</a>

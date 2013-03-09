@@ -28,6 +28,9 @@
                 <c:when test="${user.status == 'active'}">
                     已激活
                 </c:when>
+                <c:when test="${user.status == 'pause'}">
+                    暂停中
+                </c:when>
                 <c:when test="${user.status == 'cancel'}">
                     已被注销
                 </c:when>

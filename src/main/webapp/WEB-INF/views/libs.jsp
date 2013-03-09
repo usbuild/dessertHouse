@@ -28,7 +28,7 @@
                 exports: '_'
             },
             'backbone': {
-                deps: ['underscore'],
+                deps: ['jquery','underscore'],
                 exports: 'Backbone'
             },
             'bootstrap': {
@@ -38,7 +38,8 @@
                 deps: ['jquery']
             },
             'apprise': {
-                deps: ['jquery']
+                deps: ['jquery'],
+                exports:'apprise'
             },
             'jquery.ui.effects': {
                 deps: ['jquery']

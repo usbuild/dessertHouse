@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<s:form modelAttribute="passForm" cssClass="ajax-form" action="/customer/password">
+<s:form modelAttribute="passForm" cssClass="ajax-form password-form" action="/customer/password">
     <fieldset>
         <legend>修改密码</legend>
         <s:errors path="*" cssClass="alert alert-error error-msg"/>
@@ -24,6 +24,7 @@
         <s:password path="password"/>
         <s:label path="rePassword">确认密码</s:label>
         <s:password path="rePassword"/>
+        <br>
         <input type="submit" class="btn btn-primary" value="修改">
     </fieldset>
 </s:form>

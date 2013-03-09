@@ -37,11 +37,10 @@
         <th>操作</th>
     </tr>
 </table>
-<label for="total-amount">总额</label><input type="text" disabled="disabled" id="total-amount" value="0"><br>
-<label for="customer-info">用户名</label>
-<input type="text" id="customer-info"/>
-
-<div id="customer-info-div" class=""></div>
-<br>
-<label for="cash-amount">现金支付</label><input type="text" id="cash-amount" value="0"><br>
+<div id="total-amount">0</div>
+<div class="div-box">
+    <input type="text" id="cash-amount" value="0" placeholder="现金支付"><br><br>
+    <input type="text" id="customer-info" placeholder="用户名"/>
+</div>
 <button class="btn btn-primary buy-submit">提交</button>
+<div id="customer-info-div" class=""></div>

@@ -9,7 +9,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<s:form modelAttribute="user" cssClass="form form-horizontal ajax-form" action="/customer/account">
+<s:form modelAttribute="user" cssClass="form form-horizontal ajax-form account-form" action="/customer/account">
     <fieldset>
         <legend>个人信息</legend>
         <s:errors path="*" cssClass="alert alert-error error-msg"/>

@@ -12,13 +12,27 @@
     <jsp:include page="libs.jsp"/>
 </head>
 <body class="index-body">
-<sec:authorize access="isAuthenticated()">
-    欢迎您！ <sec:authentication property="name"/>
-</sec:authorize>
+<div class="index-main-div clearfix">
+    <div class="logo">
+        <img src="/static/images/logo.png" alt="logo" width="170px">
+    </div>
+    <div class="content">
 
-<sec:authorize access="isAnonymous()">
-    <a href="/customer/login" class="btn">用户登录</a>
-    <a href="/customer/signup" class="btn">用户注册</a>
-</sec:authorize>
+        <sec:authorize access="isAuthenticated()">
+            <div class="login">欢迎您, <a href="/customer/"><sec:authentication property="name"/></a>&nbsp;!</div>
+        </sec:authorize>
+
+        <sec:authorize access="isAnonymous()">
+            <div class="not-login">
+                <a href="/customer/login" class="btn">用户登录</a>
+                <a href="/customer/signup" class="btn">用户注册</a>
+            </div>
+        </sec:authorize>
+    </div>
+</div>
+<hr>
+<div class="footer">
+    &copy;<a href="https://github.com/usbuild">Usbuild</a>, All Right Reserved. 2013
+</div>
 </body>
 </html>

@@ -14,12 +14,13 @@
 </head>
 <body>
 <div class="signup-form">
-    <form:form modelAttribute="customerSignUpForm" cssClass="form-horizontal">
+    <form:form modelAttribute="customerSignUpForm" cssClass="">
         <form:errors path="*" cssClass="alert alert-error"/>
         <form:label path="name">用户名:</form:label><form:input path="name"/>
         <form:label path="password">密码:</form:label><form:password path="password"/>
         <form:label path="repassword">确认密码:</form:label><form:password path="repassword"/><br><br>
-        <input type="submit" value="提交" class="btn btn-primary">
+        <input type="submit" value="注册" class="btn btn-primary">
+        <a class="btn btn-info" href="/customer/login">登录</a>
     </form:form>
 </div>
 </body>
