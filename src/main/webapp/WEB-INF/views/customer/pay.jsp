@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="span4 pay-left">
-        <form action="" class="ajax-form">
+        <form action="/customer/pay" class="ajax-form">
             <fieldset>
                 <legend>充值缴费</legend>
                 <c:if test="${success}">
