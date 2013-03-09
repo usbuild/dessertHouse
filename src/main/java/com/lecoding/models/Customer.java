@@ -4,6 +4,7 @@ import com.lecoding.components.GenderType;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -114,6 +115,18 @@ public class Customer implements Serializable {
 
     public void setArea(Area area) {
         this.area = area;
+    }
+
+    private Timestamp lastPay;
+
+    @Column(name = "last_pay")
+    @Basic
+    public Timestamp getLastPay() {
+        return lastPay;
+    }
+
+    public void setLastPay(Timestamp lastPay) {
+        this.lastPay = lastPay;
     }
 
     @Override

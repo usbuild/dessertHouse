@@ -48,7 +48,7 @@
             tooltip: {
                 formatter: function () {
                     return '' +
-                            this.x + ': ' + this.y + ' mm';
+                            this.x + ': ' + this.y + ' ';
                 }
             },
             plotOptions: {

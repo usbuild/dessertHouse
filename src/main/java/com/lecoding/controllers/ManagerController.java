@@ -75,6 +75,8 @@ public class ManagerController {
 
     @RequestMapping(value = "/trend", headers = "X-Requested-With=XMLHttpRequest")
     public String trend(Model model) {
+        model.addAttribute("sales", managerService.saleAmount());
+        model.addAttribute("types", this.transformMap(managerService.groupSaleType()));
         return "manager/trend";
     }
 

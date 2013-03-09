@@ -21,4 +21,8 @@ public interface IManagerService {
     Map<String, Integer> reserveAmountByShop(int shop_id);
 
     Map<String, Integer> top10();
+
+    Map<String, Integer> saleAmount();
+
+    Map<String, Integer> groupSaleType();
 }

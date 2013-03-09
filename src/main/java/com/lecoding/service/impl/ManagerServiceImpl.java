@@ -2,6 +2,7 @@ package com.lecoding.service.impl;
 
 import com.lecoding.dao.ICustomerDAO;
 import com.lecoding.service.IManagerService;
+import org.apache.commons.collections.map.ListOrderedMap;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -36,7 +37,7 @@ public class ManagerServiceImpl implements IManagerService {
     private Map<String, Integer> groupQuery(String sql) {
         SQLQuery sqlQuery = getSession().createSQLQuery(sql);
         List<Object[]> list = (List<Object[]>) sqlQuery.list();
-        Map<String, Integer> map = new HashMap<String, Integer>();
+        Map<String, Integer> map = new ListOrderedMap();
         for (Object[] objects : list) {
             if (objects[0] == null) objects[0] = "其它";
             if (objects[1] instanceof Double) {
@@ -45,6 +46,8 @@ public class ManagerServiceImpl implements IManagerService {
                 map.put(objects[0].toString(), ((BigInteger) objects[1]).intValue());
             } else if (objects[1] instanceof BigDecimal) {
                 map.put(objects[0].toString(), ((BigDecimal) objects[1]).intValue());
+            } else if (objects[1] instanceof Integer) {
+                map.put(objects[0].toString(), (Integer) objects[1]);
             }
         }
         return map;
@@ -105,22 +108,24 @@ public class ManagerServiceImpl implements IManagerService {
         return newMap;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<String, Integer> saleAmountByShop(int shop_id) {
-        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id where st.shop_id = " + shop_id + " and sl.is_reserve=0 group by sale_time";
+        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id where st.shop_id = " + shop_id + " and sl.is_reserve=0 group by sale_time order by sale_time";
         Map<String, Integer> map = groupQuery(sql);
-        Map<String, Integer> newMap = new HashMap<String, Integer>();
+        Map<String, Integer> newMap = new ListOrderedMap();
         for (String key : map.keySet()) {
             newMap.put(key.split(" ")[0], map.get(key));
         }
         return newMap;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<String, Integer> reserveAmountByShop(int shop_id) {
-        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id where st.shop_id = " + shop_id + " and sl.is_reserve=1 group by sale_time";
+        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id where st.shop_id = " + shop_id + " and sl.is_reserve=1 group by sale_time order by sale_time";
         Map<String, Integer> map = groupQuery(sql);
-        Map<String, Integer> newMap = new HashMap<String, Integer>();
+        Map<String, Integer> newMap = new ListOrderedMap();
         for (String key : map.keySet()) {
             newMap.put(key.split(" ")[0], map.get(key));
         }
@@ -130,6 +135,24 @@ public class ManagerServiceImpl implements IManagerService {
     @Override
     public Map<String, Integer> top10() {
         String sql = "select gd.name,sum(sg.amount) as num from sale_goods sg left join store st on sg.store_id=st.id left join goods gd on st.goods_id=gd.id group by gd.sid order by num desc limit 0, 10;";
+        return groupQuery(sql);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Integer> saleAmount() {
+        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id group by sale_time order by st.sale_time";
+        Map<String, Integer> map = groupQuery(sql);
+        Map<String, Integer> newMap = new ListOrderedMap();
+        for (String key : map.keySet()) {
+            newMap.put(key.split(" ")[0], map.get(key));
+        }
+        return newMap;
+    }
+
+    @Override
+    public Map<String, Integer> groupSaleType() {
+        String sql = "select gt.name, sg.amount from sale_goods sg left join store st on sg.store_id = st.id left join goods gd on st.goods_id=gd.id left join goods_type gt on gd.type = gt.id group by gd.type";
         return groupQuery(sql);
     }
 
