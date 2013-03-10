@@ -123,7 +123,7 @@ public class ManagerServiceImpl implements IManagerService {
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, Integer> reserveAmountByShop(int shop_id) {
-        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id where st.shop_id = " + shop_id + " and sl.is_reserve=1 group by sale_time order by sale_time";
+        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id where st.sale_time <= CURRENT_DATE() and st.shop_id = " + shop_id + " and sl.is_reserve=1 group by sale_time order by sale_time";
         Map<String, Integer> map = groupQuery(sql);
         Map<String, Integer> newMap = new ListOrderedMap();
         for (String key : map.keySet()) {
@@ -141,7 +141,7 @@ public class ManagerServiceImpl implements IManagerService {
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, Integer> saleAmount() {
-        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id group by sale_time order by st.sale_time";
+        String sql = "select st.sale_time, sum(sg.amount * st.price) from sale_goods sg join store st on sg.store_id=st.id join sale sl on sg.sale_id=sl.id and st.sale_time <= CURRENT_DATE() group by sale_time order by st.sale_time";
         Map<String, Integer> map = groupQuery(sql);
         Map<String, Integer> newMap = new ListOrderedMap();
         for (String key : map.keySet()) {
